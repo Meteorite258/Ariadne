@@ -413,11 +413,16 @@ def test_update_tau_does_not_fall_back_when_owner_update_fails(tmp_path: Path) -
         calls.append(command)
         return CompletedProcess(command, 2, stdout="", stderr="uv failed")
 
+    def no_detached_update(*args: object, **kwargs: object) -> object:
+        raise AssertionError("synchronous failure test must not launch a real updater")
+
     result = update_tau(
         runner=runner,
         environment_prefix=tmp_path,
         inspect_distribution=False,
         latest_version_fetcher=lambda: "0.2.4",
+        platform_name="linux",
+        detached_launcher=no_detached_update,
     )
 
     assert result.succeeded is False
