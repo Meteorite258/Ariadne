@@ -768,7 +768,10 @@ async def test_failed_refresh_retains_snapshot_and_records_bounded_safe_diagnost
     registry = DynamicProviderRegistry(generation_id="generation-1")
     registry.register("source", initial)
 
-    result = await registry.refresh("local", timeout_seconds=0.01)
+    # Only the timeout case should race a short deadline. Windows timer
+    # granularity can otherwise turn an immediate validation error into timeout.
+    timeout = 0.01 if mode == "timeout" else 1.0
+    result = await registry.refresh("local", timeout_seconds=timeout)
     effective = registry.effective("local")
 
     assert result.status == ("timed_out" if mode == "timeout" else "failed")
@@ -778,7 +781,7 @@ async def test_failed_refresh_retains_snapshot_and_records_bounded_safe_diagnost
     assert secret not in repr(registry.diagnostics)
 
     # One diagnostic per layer generation, even after another failure.
-    await registry.refresh("local", timeout_seconds=0.01)
+    await registry.refresh("local", timeout_seconds=timeout)
     assert len(registry.diagnostics) == 1
 
 
