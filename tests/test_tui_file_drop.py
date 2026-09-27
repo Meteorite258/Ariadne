@@ -73,6 +73,18 @@ class TestNormalizeDroppedPaths:
     def test_missing_path_is_not_a_drop(self, tmp_path: Path) -> None:
         assert normalize_dropped_paths(str(tmp_path / "missing.txt")) is None
 
+    def test_standard_file_uri_and_remote_authority(self, tmp_path: Path) -> None:
+        file = tmp_path / "space and unicode 测试.txt"
+        file.touch()
+        assert normalize_dropped_paths(file.as_uri()) == f'"{file}"'
+        assert normalize_dropped_paths(file.as_uri().replace("file:///", "file://remote/")) is None
+
+    def test_multiple_quoted_paths_preserve_separators(self, tmp_path: Path) -> None:
+        first, second = tmp_path / "first file.txt", tmp_path / "second file.txt"
+        first.touch()
+        second.touch()
+        assert normalize_dropped_paths(f'"{first}" "{second}"') == f'"{first}" "{second}"'
+
     def test_relative_path_is_not_a_drop(self) -> None:
         assert normalize_dropped_paths("pyproject.toml") is None
 

@@ -152,6 +152,10 @@ spaces. Paths that contain spaces are quoted automatically, and any text you
 already typed is preserved. This works anywhere over the TUI, not just above
 the input box, because the terminal delivers the drop as text input.
 
+On Windows, drive paths retain their backslash separators, including quoted paths
+and multiple files. Local `file:///C:/...` URIs are also accepted. Remote file URI
+authorities are not treated as local drops.
+
 Drops are also accepted from sources that do not give the terminal keyboard focus
 first, such as the macOS Dock's Downloads stack.
 

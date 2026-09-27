@@ -21,6 +21,8 @@ quoting any path that contains whitespace.
 
 from __future__ import annotations
 
+import os
+import re
 import shlex
 from pathlib import Path
 from urllib.parse import unquote, urlparse
@@ -46,7 +48,10 @@ def normalize_dropped_paths(text: str) -> str | None:
         return _quote_path(whole)
 
     try:
-        tokens = shlex.split(stripped, posix=True)
+        # Windows separators are literal; only backslash-whitespace is a
+        # terminal escape. Preserve separators while using shlex for grouping.
+        token_text = re.sub(r"\\(?!\s)", r"\\\\", stripped) if os.name == "nt" else stripped
+        tokens = shlex.split(token_text, posix=True)
     except ValueError:
         return None
     if not tokens:
@@ -65,10 +70,16 @@ def _token_to_path(token: str) -> str | None:
     """Resolve one dropped token to an existing absolute path, if possible."""
     candidate = token
     if candidate.startswith("file://"):
+        # Also accept terminals emitting file://C:\path instead of a standard
+        # file:///C:/path URI. A remote authority is never treated as local.
+        if os.name == "nt" and re.match(r"file://[A-Za-z]:[\\/]", candidate):
+            candidate = "file:///" + candidate[7:].replace("\\", "/")
         parsed = urlparse(candidate)
         if parsed.netloc not in ("", "localhost"):
             return None
         candidate = unquote(parsed.path)
+        if os.name == "nt" and re.match(r"/[A-Za-z]:/", candidate):
+            candidate = str(Path(candidate[1:]))
     path = Path(candidate)
     if not path.is_absolute() or not path.exists():
         return None
@@ -79,5 +90,6 @@ def _quote_path(path: str) -> str:
     """Quote *path* with double quotes when it contains whitespace."""
     if not any(char.isspace() for char in path):
         return path
-    escaped = path.replace("\\", "\\\\").replace('"', '\\"')
+    escaped = path if os.name == "nt" else path.replace("\\", "\\\\")
+    escaped = escaped.replace('"', '\\"')
     return f'"{escaped}"'
