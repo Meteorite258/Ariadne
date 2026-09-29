@@ -220,8 +220,11 @@ when you want to reduce what is sent to the model.
 
 ## Picking models and themes
 
-- **`/model`** opens the model picker. It shows cached/bundled models immediately,
-  refreshes catalogs in the background, and updates the open list. The
+- **`/model`** opens the model picker from cached/bundled models immediately,
+  then refreshes catalogs in the background after the picker first renders.
+  Its model list renders only visible rows and updates the open list. Closing
+  either model picker stops its in-progress catalog refresh; cancelling a
+  scoped-model picker does not rebuild the sidebar unnecessarily. The
   account-scoped Codex snapshot is also reused across sessions, and `/model`
   refreshes it.
 - **`/scoped-models`** opens the favorite-model picker and refreshes provider
@@ -231,6 +234,11 @@ when you want to reduce what is sent to the model.
 - **Ctrl+P** quickly cycles forward through your *scoped* (favorite) models;
   **Shift+Ctrl+P** cycles backward. Neither opens the picker. Manage that list
   with `/scoped-models` or by pressing `Space` on a model in the `/model` picker.
+- Model and thinking selections update the status display immediately. Tau records
+  only the final selections when you send the next message, before that message
+  enters session history. Unsent selections disappear when you restart; cycling
+  does not change the default for future sessions. If the selected model cannot
+  be prepared, Tau reports an error instead of sending with the old model.
 - **`/theme`** switches between `tau-dark`, `tau-light`, `high-contrast`, and
   any custom themes you have installed. Each theme uses one shared selection
   palette for prompt autocomplete and modal lists such as `/resume`. In

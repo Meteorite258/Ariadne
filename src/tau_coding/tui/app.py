@@ -2963,8 +2963,12 @@ class ModelPickerScreen(ModalScreen[ModelChoice | None]):
         theme: TuiTheme,
         on_toggle_scoped: Callable[[ModelChoice], Sequence[ModelChoice]] | None = None,
         picker_kind: Literal["model", "scoped"] = "model",
+        initial_thinking_level: str | None = None,
     ) -> None:
         super().__init__()
+        self.on_first_refresh: Callable[[], None] | None = None
+        self.refresh_worker: Worker[None] | None = None
+        self.initial_thinking_level = initial_thinking_level
         available = tuple(dict.fromkeys(choices))
         self.scoped_choices = tuple(dict.fromkeys(scoped_choices))
         self.unavailable_choices = frozenset(self.scoped_choices) - frozenset(available)
@@ -2987,23 +2991,11 @@ class ModelPickerScreen(ModalScreen[ModelChoice | None]):
             yield Static(title, id="model-picker-title")
             yield Static("", id="model-picker-tabs")
             yield ModelPickerSearchInput(placeholder="Search models", id="model-picker-search")
-            yield ListView(
-                *[
-                    ListItem(
-                        Label(
-                            _model_picker_label(
-                                choice,
-                                current_model=self.current_model,
-                                current_provider=self.provider_name,
-                                scoped=choice in self.scoped_choices,
-                                unavailable=choice in self.unavailable_choices,
-                            ),
-                            markup=False,
-                        )
-                    )
-                    for choice in self.choices
-                ],
+            yield OptionList(
+                *(self._label_for_choice(choice) for choice in self.choices),
                 id="model-picker-list",
+                markup=False,
+                compact=True,
             )
             yield Static("", id="model-picker-help")
 
@@ -3011,13 +3003,18 @@ class ModelPickerScreen(ModalScreen[ModelChoice | None]):
         """Focus the search field."""
         search = self.query_one("#model-picker-search", Input)
         search.focus()
-        self._refresh_model_list()
+        # compose() already mounted the cached rows; only set selection/help.
+        self._refresh_model_list(rebuild_rows=False)
+        if self.on_first_refresh is not None:
+            self.call_after_refresh(self.on_first_refresh)
 
     def on_input_changed(self, event: Input.Changed) -> None:
         """Filter model choices as the search value changes."""
         if event.input.id != "model-picker-search":
             return
         event.stop()
+        if self.search_value == event.value:
+            return
         self.search_value = event.value
         self._refresh_model_list()
 
@@ -3030,16 +3027,16 @@ class ModelPickerScreen(ModalScreen[ModelChoice | None]):
 
     def _reset_model_list_index(self) -> None:
         """Move selection to the current model or first visible row."""
-        model_list = self.query_one("#model-picker-list", ListView)
+        model_list = self.query_one("#model-picker-list", OptionList)
         if not self.visible_choices:
-            model_list.index = None
+            model_list.highlighted = None
             return
         try:
-            model_list.index = self.visible_choices.index(
+            model_list.highlighted = self.visible_choices.index(
                 ModelChoice(provider_name=self.provider_name, model=self.current_model)
             )
         except ValueError:
-            model_list.index = 0
+            model_list.highlighted = 0
 
     def on_key(self, event: Key) -> None:
         """Route model picker keys to the list."""
@@ -3056,18 +3053,18 @@ class ModelPickerScreen(ModalScreen[ModelChoice | None]):
             event.stop()
             self.action_toggle_mode()
 
-    def on_list_view_selected(self, event: ListView.Selected) -> None:
+    def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
         """Handle the selected row."""
         event.stop()
         self._select_visible_choice()
 
     def action_cursor_up(self) -> None:
         """Move to the previous model."""
-        self.query_one("#model-picker-list", ListView).action_cursor_up()
+        self.query_one("#model-picker-list", OptionList).action_cursor_up()
 
     def action_cursor_down(self) -> None:
         """Move to the next model."""
-        self.query_one("#model-picker-list", ListView).action_cursor_down()
+        self.query_one("#model-picker-list", OptionList).action_cursor_down()
 
     def action_accept_model(self) -> None:
         """Select the highlighted model."""
@@ -3082,8 +3079,8 @@ class ModelPickerScreen(ModalScreen[ModelChoice | None]):
         """Add or remove the highlighted model from scoped models."""
         if self.on_toggle_scoped is None or not self.visible_choices:
             return
-        model_list = self.query_one("#model-picker-list", ListView)
-        index = model_list.index
+        model_list = self.query_one("#model-picker-list", OptionList)
+        index = model_list.highlighted
         if index is None:
             return
         choice = self.visible_choices[index]
@@ -3092,7 +3089,17 @@ class ModelPickerScreen(ModalScreen[ModelChoice | None]):
 
     def action_cancel(self) -> None:
         """Close without selecting a model."""
+        self.cancel_refresh()
         self.dismiss(None)
+
+    def cancel_refresh(self) -> None:
+        """Stop work owned by this picker when it is no longer visible."""
+        if self.refresh_worker is not None and not self.refresh_worker.is_finished:
+            self.refresh_worker.cancel()
+
+    def on_unmount(self) -> None:
+        """Also cancel when a caller removes the picker without dismissing it."""
+        self.cancel_refresh()
 
     def update_choices(
         self,
@@ -3101,16 +3108,25 @@ class ModelPickerScreen(ModalScreen[ModelChoice | None]):
     ) -> None:
         """Publish a refreshed catalog without replacing the open picker."""
         available = tuple(dict.fromkeys(choices))
-        self.scoped_choices = tuple(dict.fromkeys(scoped_choices))
-        self.unavailable_choices = frozenset(self.scoped_choices) - frozenset(available)
-        self.choices = tuple(dict.fromkeys((*available, *self.scoped_choices)))
+        scoped = tuple(dict.fromkeys(scoped_choices))
+        updated = tuple(dict.fromkeys((*available, *scoped)))
+        unavailable = frozenset(scoped) - frozenset(available)
+        if (
+            scoped == self.scoped_choices
+            and updated == self.choices
+            and unavailable == self.unavailable_choices
+        ):
+            return
+        self.scoped_choices = scoped
+        self.unavailable_choices = unavailable
+        self.choices = updated
         self._refresh_model_list()
 
     def _select_visible_choice(self) -> None:
         if not self.visible_choices:
             return
-        model_list = self.query_one("#model-picker-list", ListView)
-        index = model_list.index
+        model_list = self.query_one("#model-picker-list", OptionList)
+        index = model_list.highlighted
         if index is None:
             return
         choice = self.visible_choices[index]
@@ -3119,30 +3135,27 @@ class ModelPickerScreen(ModalScreen[ModelChoice | None]):
             return
         if choice in self.unavailable_choices:
             return
+        self.cancel_refresh()
         self.dismiss(choice)
 
-    def _refresh_model_list(self) -> None:
+    def _label_for_choice(self, choice: ModelChoice) -> str:
+        return _model_picker_label(
+            choice,
+            current_model=self.current_model,
+            current_provider=self.provider_name,
+            scoped=choice in self.scoped_choices,
+            unavailable=choice in self.unavailable_choices,
+        )
+
+    def _refresh_model_list(self, *, rebuild_rows: bool = True) -> None:
         base_choices = self.scoped_choices if self.mode == "scoped" else self.choices
         self.visible_choices = _filter_model_choices(base_choices, self.search_value)
-        model_list = self.query_one("#model-picker-list", ListView)
-        model_list.clear()
-        model_list.extend(
-            [
-                ListItem(
-                    Label(
-                        _model_picker_label(
-                            choice,
-                            current_model=self.current_model,
-                            current_provider=self.provider_name,
-                            scoped=choice in self.scoped_choices,
-                            unavailable=choice in self.unavailable_choices,
-                        ),
-                        markup=False,
-                    )
-                )
-                for choice in self.visible_choices
-            ]
-        )
+        if rebuild_rows:
+            model_list = self.query_one("#model-picker-list", OptionList)
+            model_list.clear_options()
+            model_list.add_options(
+                self._label_for_choice(choice) for choice in self.visible_choices
+            )
         self._reset_model_list_index()
         scope_count = len(self.scoped_choices)
         tabs = self.query_one("#model-picker-tabs", Static)
@@ -4253,14 +4266,18 @@ class TauTuiApp(App[None]):
     #login-method-list ListItem Label,
     #login-provider-list ListItem Label,
     #theme-picker-list ListItem Label,
-    #model-picker-list ListItem Label {
+    #model-picker-list {
         color: $tau-screen-text;
     }
 
     #login-method-list ListItem.-highlight Label,
     #login-provider-list ListItem.-highlight Label,
-    #theme-picker-list ListItem.-highlight Label,
-    #model-picker-list ListItem.-highlight Label {
+    #theme-picker-list ListItem.-highlight Label {
+        background: $tau-highlight-background;
+        color: $tau-highlight-text;
+    }
+
+    #model-picker-list > .option-list--option-highlighted {
         background: $tau-highlight-background;
         color: $tau-highlight-text;
     }
@@ -4854,6 +4871,12 @@ class TauTuiApp(App[None]):
             if command.incident_action is not None:
                 await self._incident_action(command.incident_action)
                 return
+            if command.model_picker_requested:
+                self._open_model_picker()
+                return
+            if command.scoped_models_picker_requested:
+                self._open_scoped_models_picker()
+                return
             if command.clear_requested:
                 self.state.clear()
             if command.reload_requested:
@@ -4933,12 +4956,8 @@ class TauTuiApp(App[None]):
                     ),
                     exclusive=False,
                 )
-            if command.model_picker_requested:
-                self._open_model_picker()
             if command.tools_picker_requested:
                 self._open_tools_reference()
-            if command.scoped_models_picker_requested:
-                self._open_scoped_models_picker()
             if command.skills_picker_requested:
                 self._open_skills_picker()
             if command.theme_picker_requested:
@@ -5994,6 +6013,12 @@ class TauTuiApp(App[None]):
         except Exception as exc:  # noqa: BLE001 - surface unexpected worker errors in the TUI
             if active_run_id != self._prompt_run_id:
                 return
+            if getattr(self.session, "has_pending_selection", False):
+                prompt = self.query_one("#prompt", PromptInput)
+                if not prompt.text:
+                    prompt.text = text
+                    prompt.move_cursor(_text_end_location(text))
+                    prompt.focus()
             message = _format_prompt_error(exc, self.session)
             self.state.error = message
             self.state.add_item("error", message)
@@ -6517,6 +6542,15 @@ class TauTuiApp(App[None]):
 
     def action_cycle_thinking(self) -> None:
         """Cycle the active thinking mode."""
+        preview = getattr(self.session, "preview_cycle_thinking_level", None)
+        if preview is not None:
+            try:
+                preview()
+            except Exception as exc:  # noqa: BLE001 - report invalid selections
+                self._notify(f"Could not change thinking mode: {exc}", severity="error")
+                return
+            self._refresh_chrome()
+            return
         self.run_worker(self._cycle_thinking_level(), exclusive=False)
 
     def action_cycle_model(self) -> None:
@@ -6530,6 +6564,15 @@ class TauTuiApp(App[None]):
     def _cycle_model(self, *, reverse: bool) -> None:
         if self.state.running:
             self._notify("Tau is already working. Press Escape to cancel.")
+            return
+        preview = getattr(self.session, "preview_cycle_scoped_model", None)
+        if preview is not None:
+            try:
+                preview(reverse=reverse)
+            except Exception as exc:  # noqa: BLE001 - report invalid selections
+                self._notify(f"Could not switch scoped model: {exc}", severity="error")
+                return
+            self._refresh_chrome()
             return
         self.run_worker(self._cycle_scoped_model(reverse=reverse), exclusive=False)
 
@@ -7056,70 +7099,79 @@ class TauTuiApp(App[None]):
     def _open_model_picker(self) -> None:
         choices = self._available_model_choices()
         scoped = tuple(getattr(self.session, "scoped_model_choices", ()))
-        if not choices and not scoped:
+        if (
+            not choices
+            and not scoped
+            and not getattr(self.session, "has_stale_active_model", False)
+        ):
             self._notify(
                 "No configured providers are usable. Run /login to set up a provider.",
                 severity="warning",
             )
             return
-        self.push_screen(
-            ModelPickerScreen(
-                choices,
-                scoped_choices=scoped,
-                current_model=self.session.model,
-                provider_name=self.session.provider_name,
-                theme=self.tui_settings.resolved_theme,
-                on_toggle_scoped=None,
-                picker_kind="model",
-            ),
-            callback=self._handle_model_picker_result,
+        picker = ModelPickerScreen(
+            choices,
+            scoped_choices=scoped,
+            current_model=self.session.model,
+            provider_name=self.session.provider_name,
+            theme=self.tui_settings.resolved_theme,
+            on_toggle_scoped=None,
+            picker_kind="model",
         )
-        self.run_worker(self._refresh_open_model_picker(), exclusive=False)
+        picker.on_first_refresh = lambda: self._start_model_picker_refresh(picker)
+        self.push_screen(
+            picker, callback=lambda choice: self._handle_model_picker_result(picker, choice)
+        )
 
-    async def _refresh_open_model_picker(self) -> None:
+    def _start_model_picker_refresh(self, picker: ModelPickerScreen) -> None:
+        if self.screen is picker:
+            picker.refresh_worker = self.run_worker(
+                self._refresh_open_model_picker(picker), exclusive=False
+            )
+
+    async def _refresh_open_model_picker(self, picker: ModelPickerScreen) -> None:
         refresh = getattr(self.session, "refresh_model_catalogs", None)
         if not callable(refresh):
             return
         try:
             await refresh()
         except Exception as error:
-            if isinstance(self.screen, ModelPickerScreen):
+            if self.screen is picker:
                 self._notify(f"Could not refresh model catalogs: {error}", severity="warning")
             return
-        if not isinstance(self.screen, ModelPickerScreen):
-            return
-        picker = self.screen
-        while not picker.is_mounted:
-            await asyncio.sleep(0)
-            if self.screen is not picker:
-                return
-        picker.update_choices(
-            self._available_model_choices(),
-            tuple(getattr(self.session, "scoped_model_choices", ())),
-        )
+        if self.screen is picker and picker.is_mounted:
+            picker.update_choices(
+                self._available_model_choices(),
+                tuple(getattr(self.session, "scoped_model_choices", ())),
+            )
 
     def _open_scoped_models_picker(self) -> None:
         choices = self._available_model_choices()
         scoped = tuple(getattr(self.session, "scoped_model_choices", ()))
-        if not choices and not scoped:
+        if (
+            not choices
+            and not scoped
+            and not getattr(self.session, "has_stale_active_model", False)
+        ):
             self._notify(
                 "No configured providers are usable. Run /login to set up a provider.",
                 severity="warning",
             )
             return
-        self.push_screen(
-            ModelPickerScreen(
-                choices,
-                scoped_choices=scoped,
-                current_model=self.session.model,
-                provider_name=self.session.provider_name,
-                theme=self.tui_settings.resolved_theme,
-                on_toggle_scoped=self._toggle_scoped_model,
-                picker_kind="scoped",
-            ),
-            callback=self._handle_scoped_models_picker_result,
+        picker = ModelPickerScreen(
+            choices,
+            scoped_choices=scoped,
+            current_model=self.session.model,
+            provider_name=self.session.provider_name,
+            theme=self.tui_settings.resolved_theme,
+            on_toggle_scoped=self._toggle_scoped_model,
+            picker_kind="scoped",
+            initial_thinking_level=self.session.thinking_level,
         )
-        self.run_worker(self._refresh_open_model_picker(), exclusive=False)
+        picker.on_first_refresh = lambda: self._start_model_picker_refresh(picker)
+        self.push_screen(
+            picker, callback=lambda choice: self._handle_scoped_models_picker_result(picker, choice)
+        )
 
     def _toggle_scoped_model(self, choice: ModelChoice) -> Sequence[ModelChoice]:
         toggle_scoped_model = getattr(self.session, "toggle_scoped_model", None)
@@ -7132,18 +7184,32 @@ class TauTuiApp(App[None]):
             self._notify(f"Could not update scoped models: {exc}", severity="error")
             return tuple(getattr(self.session, "scoped_model_choices", ()))
 
-    def _handle_scoped_models_picker_result(self, choice: ModelChoice | None) -> None:
+    def _handle_scoped_models_picker_result(
+        self, picker: ModelPickerScreen, choice: ModelChoice | None
+    ) -> None:
         del choice
-        self._refresh_chrome()
+        picker.cancel_refresh()
+        if (
+            picker.initial_thinking_level is not None
+            and picker.initial_thinking_level != self.session.thinking_level
+        ):
+            self.call_after_refresh(self._refresh_chrome)
 
-    def _handle_model_picker_result(self, choice: ModelChoice | None) -> None:
-        if choice is None:
-            return
+    def _handle_model_picker_result(
+        self, picker: ModelPickerScreen, choice: ModelChoice | None
+    ) -> None:
+        picker.cancel_refresh()
+        if choice is not None:
+            self.call_after_refresh(self._start_selected_model_switch, choice)
+
+    def _start_selected_model_switch(self, choice: ModelChoice) -> None:
         self.run_worker(self._switch_model(choice), exclusive=False)
 
     async def _switch_model(self, choice: ModelChoice) -> None:
         try:
-            select = getattr(self.session, "select_provider_model", None)
+            select = getattr(self.session, "preview_model_choice", None)
+            if select is None:
+                select = getattr(self.session, "select_provider_model", None)
             if select is not None:
                 result = select(choice)
                 if isawaitable(result):
@@ -7177,7 +7243,9 @@ class TauTuiApp(App[None]):
         self._set_tui_theme(theme)
 
     async def _set_thinking_level(self, level: str) -> None:
-        setter = getattr(self.session, "set_thinking_level", None)
+        setter = getattr(self.session, "preview_thinking_level", None)
+        if setter is None:
+            setter = getattr(self.session, "set_thinking_level", None)
         if setter is None:
             self._notify("Thinking controls are not available.", severity="warning")
             return

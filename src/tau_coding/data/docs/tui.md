@@ -26,11 +26,21 @@ without persisted timing still count toward token usage but not these metrics.
 
 ## `/model` and `/scoped-models`
 
-The pickers render cached/bundled choices immediately, then refresh remote
-catalogs in the background and update the open list. This includes the
+The pickers open from cached/bundled choices immediately, then start remote
+catalog refresh only after the first screen refresh and update the open list.
+The virtualized model list renders only visible rows and does not mount the
+entire catalog twice. Closing either picker cancels its owned catalog refresh;
+closing scoped models without changing the effective thinking level avoids
+refreshing the sidebar. A model selected from the picker updates the session
+after the modal has closed. This includes the
 account-scoped OpenAI Codex model snapshot, so models discovered in an earlier
 session are available before a refresh. Both commands refresh the Codex catalog;
-refresh failures leave the existing list usable. Use `tau update --models` for
+refresh failures leave the existing list usable. A missing active model after a
+catalog refresh does not prevent either picker from opening or interrupt the
+committed provider. Model selections and thinking
+changes in the TUI update immediately, but only the final selection is recorded
+in session history before the next accepted user message. Unsent selections are
+lost on restart and do not update defaults for future sessions. Use `tau update --models` for
 forced public-catalog revalidation or `TAU_OFFLINE=1` to disable catalog network
 access.
 
