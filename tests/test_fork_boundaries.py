@@ -1,4 +1,4 @@
-"""Fork-boundary guards for Amadeus.
+"""Fork-boundary guards for Ariadne.
 
 These tests encode the layering rules documented in ``AGENTS.md``:
 
@@ -52,7 +52,7 @@ def test_core_packages_do_not_import_application_packages() -> None:
             if leaked:
                 offenders.append(f"{path.relative_to(ROOT)}: {sorted(leaked)}")
     assert offenders == [], (
-        "Tau core packages must stay independent of Amadeus application/domain "
+        "Tau core packages must stay independent of Ariadne application/domain "
         f"packages: {offenders}"
     )
 
@@ -73,7 +73,7 @@ def test_distribution_name_is_consistent() -> None:
     pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     distribution_name = pyproject["project"]["name"]
 
-    assert distribution_name == "amadeus"
+    assert distribution_name == "ariadne"
     assert distribution_name == version_module._DISTRIBUTION_NAME
     assert distribution_name == update_check.PYPI_PACKAGE_NAME
 

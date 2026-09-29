@@ -313,7 +313,7 @@ Agent 执行链通过应用层的 OpenTelemetry 适配器导出，可复用演�
 
 ### 外部告警接入建议
 
-2026-09-26 讨论建议：在演示环境中配置 Prometheus 告警规则，增加 Alertmanager，经 HTTP webhook 接入 Amadeus。此项为本次提出的选型建议，尚未作为用户确认的具体外部集成记录。依据见 [Prometheus 告警架构](https://prometheus.io/docs/alerting/latest/overview/) 与 [Alertmanager 分组、路由和抑制](https://prometheus.io/docs/alerting/latest/alertmanager/)。
+2026-09-26 讨论建议：在演示环境中配置 Prometheus 告警规则，增加 Alertmanager，经 HTTP webhook 接入 Ariadne。此项为本次提出的选型建议，尚未作为用户确认的具体外部集成记录。依据见 [Prometheus 告警架构](https://prometheus.io/docs/alerting/latest/overview/) 与 [Alertmanager 分组、路由和抑制](https://prometheus.io/docs/alerting/latest/alertmanager/)。
 
 接收端属于应用接入层；领域层处理统一的 AlertEvent 与案件 Command。外部格式不进入 `tau_agent`。人工导入与 webhook 使用同一套规范化和案件关联规则。
 
@@ -327,7 +327,7 @@ Agent 执行链通过应用层的 OpenTelemetry 适配器导出，可复用演�
 - 来源、环境、实体、规则、严重程度、开始/恢复/接收时间、原始引用及外部 incident ID。乱序和重复投递不能使旧消息覆盖较新的状态；无法判定时保留冲突。
 - 显式配置哪些告警可自动启动调查，以及全局并发、队列与预算限制。告警风暴不能无限创建模型执行。
 - 告警解除只更新该告警的状态；业务恢复需要观测支持，诊断和结案按 Case 流程处理。
-- 已有企业事故管理平台时，保存其 incident ID 映射并明确由谁管理外部事故状态；Amadeus 单独管理调查进度。PagerDuty 等平台可通过 [事故生命周期 webhook](https://support.pagerduty.com/main/docs/webhooks) 提供入口。
+- 已有企业事故管理平台时，保存其 incident ID 映射并明确由谁管理外部事故状态；Ariadne 单独管理调查进度。PagerDuty 等平台可通过 [事故生命周期 webhook](https://support.pagerduty.com/main/docs/webhooks) 提供入口。
 
 统一验证阶段编写并执行重复投递、乱序更新、恢复后复发、接收后中断恢复以及告警风暴的针对性正确性测试。接入服务运行情况与消息处理失败应可观察。
 

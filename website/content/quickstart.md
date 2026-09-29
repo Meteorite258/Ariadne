@@ -1,21 +1,21 @@
 ---
 title: Quickstart
-description: Install Amadeus, connect a model, and run your first coding session.
+description: Install Ariadne, connect a model, and run your first coding session.
 type: doc
 ---
 
-This page takes you from nothing to your first Amadeus session. It should take a
+This page takes you from nothing to your first Ariadne session. It should take a
 few minutes.
 
-## 1. Install Amadeus
+## 1. Install Ariadne
 
-Amadeus is a fork of Tau and is **not published to PyPI**. Install it from a
+Ariadne is a fork of Tau and is **not published to PyPI**. Install it from a
 checkout using [`uv`](https://docs.astral.sh/uv/); it requires Python 3.12 or
-newer. The distribution is named `amadeus` and the CLI command remains `tau`.
+newer. The distribution is named `ariadne` and the CLI command remains `tau`.
 
 ```bash
 git clone https://github.com/Meteorite258/Ariadne.git
-cd Amadeus
+cd Ariadne
 uv sync --dev
 ```
 

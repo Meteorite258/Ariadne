@@ -1,13 +1,13 @@
-# Amadeus 状态归属与简化设计草案
+# Ariadne 状态归属与简化设计草案
 
 > 本文下方保留改造前的讨论。已确定的 v2 方案及实现验收见
 > [持续调查改造记录](../architecture/incident-agent-v2.md)。明确取舍为：
-> 新案件默认 `token_limit=null`，无任务预算；移除 Amadeus 轮次/角色周期限制；
+> 新案件默认 `token_limit=null`，无任务预算；移除 Ariadne 轮次/角色周期限制；
 > 旧案件只读，新流程使用 `v2/` 数据库和 artifacts，不执行旧案迁移。
 > 下方关于迁移继续执行或尚未确认预算的建议已被上述决策替代。
 
 2026-09-28。依据当前代码审计，承接[架构地图](../architecture/incident-agent-architecture-map.md)和用户对 P1–P10 的反馈。
-本文是统一设计草案；没有实施下面的数据迁移或运行逻辑改造。用户已要求去除 Amadeus 的
+本文是统一设计草案；没有实施下面的数据迁移或运行逻辑改造。用户已要求去除 Ariadne 的
 `max_turns` 与 `role_timeout_seconds`，并认可前述改进方向；token 预算是否完全移除仍属设计讨论。
 本轮不运行真实模型，不修改现有验证总额度或真实案件预算。
 
@@ -117,7 +117,7 @@ Case 的人工暂停/关闭意图必须显式保存；“运行中/等待中”�
 
 ## 6. 取消不必要的运行上限
 
-按用户要求，后续实现从 Amadeus 移除 `max_turns`、`role_timeout_seconds` 的配置和执行限制，
+按用户要求，后续实现从 Ariadne 移除 `max_turns`、`role_timeout_seconds` 的配置和执行限制，
 不把 8 轮或 300 秒替换成新的默认硬边界。Tau 的通用可选参数无需删除，调查不设置它。
 
 必要边界仍有明确归属：

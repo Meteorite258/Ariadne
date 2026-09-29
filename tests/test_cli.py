@@ -374,16 +374,16 @@ def test_update_command_upgrades_without_startup_check(monkeypatch: pytest.Monke
         cli,
         "update_tau",
         lambda: UpdateResult(
-            command=("uv", "tool", "install", "amadeus@0.2.4"),
-            stdout="Updated amadeus",
+            command=("uv", "tool", "install", "ariadne@0.2.4"),
+            stdout="Updated ariadne",
         ),
     )
 
     result = CliRunner().invoke(app, ["update"])
 
     assert result.exit_code == 0
-    assert "Updated amadeus" in result.stdout
-    assert "Tau update completed with: uv tool install amadeus@0.2.4" in result.stdout
+    assert "Updated ariadne" in result.stdout
+    assert "Tau update completed with: uv tool install ariadne@0.2.4" in result.stdout
 
 
 def test_update_models_force_refreshes_catalog(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -414,7 +414,7 @@ def test_update_command_reports_windows_handoff_without_claiming_completion(
         cli,
         "update_tau",
         lambda: UpdateResult(
-            command=("uv", "tool", "install", "amadeus@0.2.4"),
+            command=("uv", "tool", "install", "ariadne@0.2.4"),
             stdout="Tau update is scheduled and will start after this process exits.",
             deferred=True,
         ),

@@ -1,7 +1,7 @@
 # Tau release process
 
 > **Historical note.** This document describes Tau's upstream PyPI release
-> process. Amadeus is a fork that is **not published to PyPI**; it is installed
+> process. Ariadne is a fork that is **not published to PyPI**; it is installed
 > from a checkout, and the automatic PyPI workflow is disabled. The steps below
 > are kept as reference for the inherited Tau project.
 

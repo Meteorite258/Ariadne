@@ -49,8 +49,8 @@ def test_update_tau_uses_uv_tool_for_uv_owned_tool_environment(tmp_path: Path) -
     )
 
     assert result.succeeded is True
-    assert result.command == ("uv", "tool", "install", "amadeus@0.2.4")
-    assert calls == [("uv", "tool", "install", "amadeus@0.2.4")]
+    assert result.command == ("uv", "tool", "install", "ariadne@0.2.4")
+    assert calls == [("uv", "tool", "install", "ariadne@0.2.4")]
 
 
 def test_update_tau_hands_windows_uv_tool_update_to_waiting_process(tmp_path: Path) -> None:
@@ -82,7 +82,7 @@ def test_update_tau_hands_windows_uv_tool_update_to_waiting_process(tmp_path: Pa
 
     assert result.succeeded is True
     assert result.deferred is True
-    assert result.command == ("uv", "tool", "install", "amadeus@0.2.4")
+    assert result.command == ("uv", "tool", "install", "ariadne@0.2.4")
     assert "scheduled" in result.stdout
     assert str(handoff_dir / "update.log") in result.stdout
     assert len(launches) == 1
@@ -97,7 +97,7 @@ def test_update_tau_hands_windows_uv_tool_update_to_waiting_process(tmp_path: Pa
     )
     assert json.loads(base64.b64decode(detached_command[-1])) == {
         "executable": "uv",
-        "arguments": '"tool" "install" "amadeus@0.2.4"',
+        "arguments": '"tool" "install" "ariadne@0.2.4"',
     }
     assert options["creationflags"] == 0x00000208
     script = (handoff_dir / "update.ps1").read_text(encoding="utf-8")
@@ -154,7 +154,7 @@ def test_windows_handoff_reports_staging_write_failure_and_removes_owned_directo
     monkeypatch.setattr(Path, "write_text", fail_script_write)
 
     result = updater._handoff_windows_update(
-        ("uv", "tool", "install", "amadeus@1.0"),
+        ("uv", "tool", "install", "ariadne@1.0"),
         launcher=lambda *args, **kwargs: object(),
         executable_finder=lambda name: "powershell.exe",
         parent_pid=4242,
@@ -176,7 +176,7 @@ def test_windows_handoff_reports_launch_failure_and_preserves_caller_directory(
         raise OSError("process creation denied")
 
     result = updater._handoff_windows_update(
-        ("uv", "tool", "install", "amadeus@1.0"),
+        ("uv", "tool", "install", "ariadne@1.0"),
         launcher=fail_launch,
         executable_finder=lambda name: "powershell.exe",
         parent_pid=4242,
@@ -362,7 +362,7 @@ def test_update_tau_uses_pipx_for_pipx_owned_environment(tmp_path: Path) -> None
         inspect_distribution=False,
     )
 
-    assert result.command == ("pipx", "upgrade", "amadeus")
+    assert result.command == ("pipx", "upgrade", "ariadne")
 
 
 def test_update_tau_reuses_uv_pip_for_uv_installed_distribution(tmp_path: Path) -> None:
@@ -381,7 +381,7 @@ def test_update_tau_reuses_uv_pip_for_uv_installed_distribution(tmp_path: Path) 
         "--python",
         "/env/bin/python",
         "--upgrade",
-        "amadeus",
+        "ariadne",
     )
 
 
@@ -400,7 +400,7 @@ def test_update_tau_uses_current_environment_pip_for_pip_install(tmp_path: Path)
         "pip",
         "install",
         "--upgrade",
-        "amadeus",
+        "ariadne",
     )
 
 
@@ -426,8 +426,8 @@ def test_update_tau_does_not_fall_back_when_owner_update_fails(tmp_path: Path) -
     )
 
     assert result.succeeded is False
-    assert result.failures == ("uv tool install amadeus@0.2.4: uv failed",)
-    assert calls == [("uv", "tool", "install", "amadeus@0.2.4")]
+    assert result.failures == ("uv tool install ariadne@0.2.4: uv failed",)
+    assert calls == [("uv", "tool", "install", "ariadne@0.2.4")]
 
 
 def test_update_tau_refuses_direct_url_install(tmp_path: Path) -> None:

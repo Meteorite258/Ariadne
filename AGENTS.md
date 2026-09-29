@@ -1,10 +1,10 @@
-# Amadeus Agent Instructions
+# Ariadne Agent Instructions
 
-Amadeus is a **downstream fork of Tau**, which is a Python implementation of Pi's minimalist coding-agent harness architecture. Amadeus reuses Tau's core and layers a long-running incident-investigation product on top. Develop it incrementally, with each phase clearly documented and tested.
+Ariadne is a **downstream fork of Tau**, which is a Python implementation of Pi's minimalist coding-agent harness architecture. Ariadne reuses Tau's core and layers a long-running incident-investigation product on top. Develop it incrementally, with each phase clearly documented and tested.
 
 ## Fork Layout and Maintenance
 
-Keep Tau's separation of concerns and add Amadeus in the outer layers:
+Keep Tau's separation of concerns and add Ariadne in the outer layers:
 
 ```text
 tau_ai            provider/model streaming layer              (Tau core)
@@ -25,14 +25,14 @@ Rules for the fork:
   small enough to propose upstream.
 - `tau_incident` must not import `tau_coding`; application wiring belongs in
   `tau_coding/incident`, not in the domain package.
-- Put new Amadeus behavior in the outermost layer that can own it.
-- Keep the distribution name `amadeus` and the CLI command `tau` consistent
+- Put new Ariadne behavior in the outermost layer that can own it.
+- Keep the distribution name `ariadne` and the CLI command `tau` consistent
   across `pyproject.toml`, `src/tau_coding/version.py`, and
   `src/tau_coding/update_check.py`.
 
 ## Upstream Sync
 
-Amadeus tracks Tau upstream at <https://github.com/huggingface/tau>. Add it as a
+Ariadne tracks Tau upstream at <https://github.com/huggingface/tau>. Add it as a
 fetch-only remote and review divergence before syncing:
 
 ```bash
@@ -42,11 +42,11 @@ git log --oneline HEAD..upstream/main
 ```
 
 Prefer rebasing the small, generic core patches over large merges, and keep
-Amadeus work in separate commits so core changes stay easy to cherry-pick.
+Ariadne work in separate commits so core changes stay easy to cherry-pick.
 
 ## Project Roadmap
 
-Amadeus work is tracked in this repository's issues:
+Ariadne work is tracked in this repository's issues:
 
 - <https://github.com/Meteorite258/Ariadne/issues>
 
@@ -90,7 +90,7 @@ Do not let Textual become a dependency of the reusable agent harness.
 ## Development Workflow
 
 - Work in small, documented phases.
-- Keep changes aligned with the Amadeus issues; keep core changes aligned with Tau's upstream roadmap.
+- Keep changes aligned with the Ariadne issues; keep core changes aligned with Tau's upstream roadmap.
 - Add or update docs when introducing architectural concepts.
 - Add tests for behavior before expanding features.
 - Run tests and Python commands through `uv` (for example, `uv run pytest` or `uv run python ...`) so they use the project environment.
@@ -122,7 +122,7 @@ Each substantial phase should leave behind beginner-friendly notes under `dev-no
 - how to test or use it
 
 When a phase adds or changes user-facing behavior, also update the docs under
-`website/content/`. Note that Amadeus does not publish this site; the
+`website/content/`. Note that Ariadne does not publish this site; the
 `website/content/` guides are inherited from Tau and are kept for local preview
 and future use.
 

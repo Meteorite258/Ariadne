@@ -5,11 +5,11 @@
 2026-09-28 统一改造不增加或重编号 Stage。现行状态归属、持续执行与只读历史边界
 以[持续调查 v2](../architecture/incident-agent-v2.md)为准；原计划的任务预算、角色限制和旧案迁移建议已替代。
 
-基线：2026-09-26，提交 `c66fb87`，Python 3.12+、`tau-ai 0.4.5`。架构依据为[目标设计](incident-agent.md)；Tau 的分层与前端接入顺序遵循[路线图 #1](https://github.com/huggingface/tau/issues/1)。本系列 Stage 是 Amadeus 的实施顺序，不重编号 Tau 原有 Phase。
+基线：2026-09-26，提交 `c66fb87`，Python 3.12+、`tau-ai 0.4.5`。架构依据为[目标设计](incident-agent.md)；Tau 的分层与前端接入顺序遵循[路线图 #1](https://github.com/huggingface/tau/issues/1)。本系列 Stage 是 Ariadne 的实施顺序，不重编号 Tau 原有 Phase。
 
 ## 1. 背景与目标
 
-现有 Tau 提供模型调用、工具循环、编码会话和多种前端。Amadeus 在其上增加长期故障调查能力：围绕持久 Case 获取证据、比较假设、审查和修正判断，并在等待、并行执行、进程中断后继续调查。
+现有 Tau 提供模型调用、工具循环、编码会话和多种前端。Ariadne 在其上增加长期故障调查能力：围绕持久 Case 获取证据、比较假设、审查和修正判断，并在等待、并行执行、进程中断后继续调查。
 
 完整交付包括案件与证据、请求级上下文、规划和执行、有界并行、预算与恢复、审查和局部修复、历史记忆、版本化报告、隔离 Python 分析、真实与离线遥测、执行 tracing，以及 CLI/TUI/RPC 和常驻运行入口。产品保持只读调查与处置建议的边界。
 

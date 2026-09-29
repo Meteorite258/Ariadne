@@ -1,4 +1,4 @@
-# Amadeus Stage 5 环境
+# Ariadne Stage 5 环境
 
 状态：**Stage 7 验证中**。WSL2 中已启动全部 25 个服务，固定镜像 digest，
 完成真实采集导出回放、容器隔离与派生证据链、Collector/Jaeger 检查。

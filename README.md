@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/tau-header.svg" alt="Amadeus — an incident-investigation agent built on the Tau harness" width="100%" />
+  <img src="docs/assets/tau-header.svg" alt="Ariadne — an incident-investigation agent built on the Tau harness" width="100%" />
 </p>
 
 <p align="center">
@@ -16,10 +16,10 @@
 
 ---
 
-## What is Amadeus?
+## What is Ariadne?
 
-**Amadeus is a downstream fork of [Tau](https://github.com/huggingface/tau)**, a
-Pi-style Python coding-agent harness. Amadeus keeps Tau's layered architecture
+**Ariadne is a downstream fork of [Tau](https://github.com/huggingface/tau)**, a
+Pi-style Python coding-agent harness. Ariadne keeps Tau's layered architecture
 (`tau_ai` → `tau_agent` → `tau_coding`) and adds a long-running
 **incident-investigation** capability on top:
 
@@ -34,7 +34,7 @@ The reusable Tau core stays free of incident concepts. For how the fork is
 maintained — layering rules, upstream sync, and what may be committed back to
 Tau — see [`dev-notes/`](dev-notes/) and [`AGENTS.md`](AGENTS.md).
 
-The distribution is named `amadeus`; the CLI command remains `tau`.
+The distribution is named `ariadne`; the CLI command remains `tau`.
 
 ## What is Tau?
 
@@ -70,13 +70,13 @@ or rendering. Frontends consume events.
 
 ## Install
 
-Amadeus is not published to PyPI. Install it from a checkout. It requires
+Ariadne is not published to PyPI. Install it from a checkout. It requires
 Python 3.12 or newer and uses [`uv`](https://docs.astral.sh/uv/). The
-distribution is named `amadeus` while the CLI command stays `tau`.
+distribution is named `ariadne` while the CLI command stays `tau`.
 
 ```bash
 git clone https://github.com/Meteorite258/Ariadne.git
-cd Amadeus
+cd Ariadne
 uv sync --dev
 uv run tau --version
 ```
@@ -198,7 +198,7 @@ uv run ruff format --check .
 uv run mypy
 ```
 
-Run Amadeus from the checkout:
+Run Ariadne from the checkout:
 
 ```bash
 uv run tau
@@ -217,7 +217,7 @@ Open <http://localhost:1313/>. Build with `hugo --minify`.
 
 ## Documentation
 
-Amadeus's own engineering notes live in [`dev-notes/`](dev-notes/); the
+Ariadne's own engineering notes live in [`dev-notes/`](dev-notes/); the
 authoritative design and status records are under
 [`dev-notes/design/`](dev-notes/design/) and
 [`dev-notes/architecture/`](dev-notes/architecture/). The user-facing guides in
@@ -227,9 +227,9 @@ For Tau's published documentation, see
 <https://twotimespi.dev/> (upstream).
 
 Fork-level maintenance, layering rules, and upstream sync are described in
-[`AGENTS.md`](AGENTS.md). Amadeus work is tracked in this repository's
+[`AGENTS.md`](AGENTS.md). Ariadne work is tracked in this repository's
 [issues](https://github.com/Meteorite258/Ariadne/issues).
 
 ## License
 
-Amadeus is a fork of Tau and is released under the same [MIT License](LICENSE).
+Ariadne is a fork of Tau and is released under the same [MIT License](LICENSE).

@@ -4,8 +4,8 @@
     "date": "2026-09-29",
     "sections": {
       "New": [
-        "Amadeus is a downstream fork of Tau that adds a long-running incident-investigation capability: the `tau_incident` domain package (persistent cases, evidence, submission protocol, planning, task execution, context, budgets and recovery, review, reporting, cross-case memory) and the `tau_coding/incident` application assembly (host, run queue, daemon, alert intake, HTTP/RPC/TUI, telemetry/Docker/OpenTelemetry adapters).",
-        "The distribution is renamed to `amadeus`; the CLI command remains `tau`."
+        "Ariadne is a downstream fork of Tau that adds a long-running incident-investigation capability: the `tau_incident` domain package (persistent cases, evidence, submission protocol, planning, task execution, context, budgets and recovery, review, reporting, cross-case memory) and the `tau_coding/incident` application assembly (host, run queue, daemon, alert intake, HTTP/RPC/TUI, telemetry/Docker/OpenTelemetry adapters).",
+        "The distribution is renamed to `ariadne`; the CLI command remains `tau`."
       ],
       "Changed": [
         "The Hugo documentation site under `website/` is kept in the repo but is no longer published, and PyPI publishing is disabled for this fork."

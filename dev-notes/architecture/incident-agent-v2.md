@@ -1,4 +1,4 @@
-# Amadeus 持续调查 v2：实现与离线验证
+# Ariadne 持续调查 v2：实现与离线验证
 
 日期：2026-09-28。**统一改造与离线验证完成。**
 **Stage 7 仍为验证中；固定模型完整诊断的有效性待验证。**
@@ -40,7 +40,7 @@ Tau 分层不变：`tau_ai` 负责 provider，`tau_agent` 提供通用 Harness�
 
 ### 持续执行
 
-- Incident Harness 使用 `max_turns=None`。移除 Amadeus 的 max_turns、role_timeout_seconds、max_tasks、call_limit、任务额度和报告预留。
+- Incident Harness 使用 `max_turns=None`。移除 Ariadne 的 max_turns、role_timeout_seconds、max_tasks、call_limit、任务额度和报告预留。
 - 保留单请求网络超时、工具超时、容器资源/输出限制、租约、用户控制、请求窗口，以及可选案件 token cap、deadline、运行 checkpoint_steps。
 - `save_progress` 校验契约版本、进度版本、有效 attempt、执行 token、所有权代次和幂等 ID。
   执行成功状态、artifact 来源及执行游标由运行时核对；保存不结束 attempt。

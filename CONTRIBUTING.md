@@ -1,16 +1,16 @@
-# Contributing to Amadeus
+# Contributing to Ariadne
 
-Amadeus is a downstream fork of [Tau](https://github.com/huggingface/tau). It
+Ariadne is a downstream fork of [Tau](https://github.com/huggingface/tau). It
 keeps Tau's layered architecture and adds the `tau_incident` domain package and
 the `tau_coding/incident` application assembly on top. Contributions should
 preserve both purposes: keep the reusable Tau core small and readable, and keep
 incident-specific behavior out of that core.
 
-The distribution is named `amadeus`; the CLI command remains `tau`.
+The distribution is named `ariadne`; the CLI command remains `tau`.
 
 ## Project philosophy
 
-Amadeus builds on Tau's three layers:
+Ariadne builds on Tau's three layers:
 
 ```text
 tau_ai      provider/model streaming layer
@@ -130,12 +130,12 @@ website/content/
 
 ## Release process
 
-Amadeus is a fork and is **not published to PyPI**. It is installed from a
+Ariadne is a fork and is **not published to PyPI**. It is installed from a
 checkout (see the README). Bumping `[project].version` in `pyproject.toml` is a
 normal, reviewed change; there is no automated publishing pipeline wired for
 this fork.
 
-If Amadeus is ever published under its own distribution name, add a release
+If Ariadne is ever published under its own distribution name, add a release
 process here first and keep the inherited `dev-notes/release-process.md` notes
 as historical reference for Tau's upstream process.
 
@@ -153,7 +153,7 @@ Avoid unrelated refactors in feature or bug-fix PRs. If a larger design change i
 
 ## Roadmap alignment
 
-Amadeus is developed incrementally. For larger changes, check this repository's
+Ariadne is developed incrementally. For larger changes, check this repository's
 issues before starting:
 
 <https://github.com/Meteorite258/Ariadne/issues>

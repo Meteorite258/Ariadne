@@ -17,7 +17,7 @@ tau [OPTIONS] [PROMPT] [COMMAND] [ARGS]
 - Put flags before the prompt — Tau treats everything after the last recognized flag as prompt text, including tokens that look like flags.
 
 On TUI and text print-mode startup, Tau may show a non-blocking notice when a
-newer `amadeus` release is available on PyPI. In the TUI, this notice is the first
+newer `ariadne` release is available on PyPI. In the TUI, this notice is the first
 transcript item and appears in bright yellow. Run `tau update` to upgrade. Disable
 the check with `TAU_NO_UPDATE_CHECK=1`; utility commands such as `tau --version`,
 `tau update`, `tau sessions`, and `tau export` do not run it. After an upgrade,

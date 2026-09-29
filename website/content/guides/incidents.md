@@ -3,7 +3,7 @@ title: Incident investigation
 description: Open a case, investigate replay telemetry, and inspect evidence and unverified progress.
 ---
 
-Amadeus Stages 1–6 are **implemented, pending unified verification**. Stage 7 has
+Ariadne Stages 1–6 are **implemented, pending unified verification**. Stage 7 has
 run deterministic tests, full Python tests in WSL2, actual container and telemetry
 checks, and selected CLI and service operations. A fixed-model investigation has
 not yet produced a complete, independently reviewed diagnosis.

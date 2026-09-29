@@ -3,9 +3,9 @@ requires = ["hatchling>=1.26"]
 build-backend = "hatchling.build"
 
 [project]
-name = "amadeus"
+name = "ariadne"
 version = "0.1.0"
-description = "Amadeus — an incident-investigation agent built on the Tau coding-agent harness."
+description = "Ariadne — an incident-investigation agent built on the Tau coding-agent harness."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]

@@ -1,4 +1,5 @@
 *.local.json
+compose.resolved.json
 datasets/
 control/actions.jsonl
 control/operator.lock

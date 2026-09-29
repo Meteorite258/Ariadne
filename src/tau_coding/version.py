@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from importlib.metadata import PackageNotFoundError, version
 
-_DISTRIBUTION_NAME = "amadeus"
+_DISTRIBUTION_NAME = "ariadne"
 _UNKNOWN_VERSION = "0+unknown"
 
 

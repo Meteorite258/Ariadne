@@ -1,6 +1,6 @@
 baseURL = "http://localhost:1313/"
 languageCode = "en-us"
-title = "Amadeus (fork of Tau)"
+title = "Ariadne (fork of Tau)"
 enableRobotsTXT = true
 publishDir = "public"
 
@@ -15,7 +15,7 @@ publishDir = "public"
   style = "monokai"
 
 [params]
-  description = "Amadeus — a downstream fork of Tau. This documentation site is not published."
+  description = "Ariadne — a downstream fork of Tau. This documentation site is not published."
   githubUrl = "https://github.com/Meteorite258/Ariadne"
   editRepoUrl = "https://github.com/Meteorite258/Ariadne/edit/main/website/content"
   githubRepo = "Meteorite258/Ariadne"

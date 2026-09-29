@@ -1,6 +1,6 @@
 name: Deploy documentation
 
-# Amadeus is a fork whose documentation site is not published. The workflow is
+# Ariadne is a fork whose documentation site is not published. The workflow is
 # kept for local/preview builds but no longer deploys on push; run it manually
 # with workflow_dispatch if you intentionally want to build the site.
 on:
