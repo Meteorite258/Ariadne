@@ -30,6 +30,31 @@ Rules for the fork:
   across `pyproject.toml`, `src/tau_coding/version.py`, and
   `src/tau_coding/update_check.py`.
 
+## Incident Identifiers Are a Data Contract
+
+The rename to Ariadne covers the product, the distribution, and the prose. It
+deliberately does **not** cover the incident runtime identifiers:
+
+- `AMADEUS_INCIDENT_TOKEN`, `AMADEUS_ALERT_TOKEN`, `AMADEUS_ALERT_TOKEN_FILE`,
+  `AMADEUS_INCIDENT_CONFIG`, `AMADEUS_INCIDENT_MODE`, `AMADEUS_OUTPUT_FILES`,
+  `AMADEUS_OUTPUT_BYTES`, `AMADEUS_VALIDATION_SECRET_KEY`
+- the `amadeus-demo` telemetry/deployment environment, the `amadeus-analysis`
+  image, and the `amadeus-*` service, tracer, history, and Alertmanager names
+
+They are embedded in persisted case records and artifact hashes, in exported
+offline datasets, in `versions.json` configuration digests, and in the Stage 7
+verification fingerprints. Renaming them is not a text replacement: it requires
+a migration that recomputes `receipts.content_hash` and `artifacts.sha256`,
+rewrites exported datasets, restarts the demo so telemetry carries the new
+environment tag, and re-runs the affected verification. Do not "finish" the
+rename in these values without that migration.
+
+A related trap: the case store is sharded by a digest of the **canonical project
+path** (`TauPaths.project_incident_dir`). Moving or renaming the local checkout
+directory changes that digest, so existing cases appear empty even though the
+data is intact. Prefer keeping the checkout path stable, or migrate the
+`incidents/` directory alongside the move.
+
 ## Upstream Sync
 
 Ariadne tracks Tau upstream at <https://github.com/huggingface/tau>. Add it as a
