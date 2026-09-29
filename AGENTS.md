@@ -1,14 +1,59 @@
-# Tau Agent Instructions
+# Amadeus Agent Instructions
 
-Tau is a Python implementation of Pi's minimalist coding-agent harness architecture. The goal is to develop it incrementally, with each phase clearly documented and tested.
+Amadeus is a **downstream fork of Tau**, which is a Python implementation of Pi's minimalist coding-agent harness architecture. Amadeus reuses Tau's core and layers a long-running incident-investigation product on top. Develop it incrementally, with each phase clearly documented and tested.
+
+## Fork Layout and Maintenance
+
+Keep Tau's separation of concerns and add Amadeus in the outer layers:
+
+```text
+tau_ai            provider/model streaming layer              (Tau core)
+tau_agent         portable agent harness, loop, tools, events (Tau core)
+tau_coding        coding-agent CLI, resources, TUI, sessions  (Tau core + entry points)
+tau_incident      incident domain: cases, evidence, planning,
+                  execution, context, budgets/recovery, review,
+                  reporting, memory
+tau_coding/incident  incident application assembly: host, run queue,
+                  daemon, alert intake, HTTP/RPC/TUI, telemetry,
+                  Docker and OpenTelemetry adapters
+```
+
+Rules for the fork:
+
+- `tau_ai` and `tau_agent` must stay free of incident concepts and of
+  `tau_coding` / `tau_incident` imports. Changes there should stay generic and
+  small enough to propose upstream.
+- `tau_incident` must not import `tau_coding`; application wiring belongs in
+  `tau_coding/incident`, not in the domain package.
+- Put new Amadeus behavior in the outermost layer that can own it.
+- Keep the distribution name `amadeus` and the CLI command `tau` consistent
+  across `pyproject.toml`, `src/tau_coding/version.py`, and
+  `src/tau_coding/update_check.py`.
+
+## Upstream Sync
+
+Amadeus tracks Tau upstream at <https://github.com/huggingface/tau>. Add it as a
+fetch-only remote and review divergence before syncing:
+
+```bash
+git remote add upstream https://github.com/huggingface/tau.git
+git fetch upstream
+git log --oneline HEAD..upstream/main
+```
+
+Prefer rebasing the small, generic core patches over large merges, and keep
+Amadeus work in separate commits so core changes stay easy to cherry-pick.
 
 ## Project Roadmap
 
-The implementation roadmap is tracked in GitHub issue #1:
+Amadeus work is tracked in this repository's issues:
 
-- https://github.com/huggingface/tau/issues/1
+- <https://github.com/Meteorite258/Amadeus/issues>
 
-Use that issue as the primary reference for phase ordering and architectural intent.
+Tau's upstream roadmap still governs phase ordering and architectural intent for
+the reusable core:
+
+- <https://github.com/huggingface/tau/issues/1>
 
 ## Architecture Principles
 
@@ -45,7 +90,7 @@ Do not let Textual become a dependency of the reusable agent harness.
 ## Development Workflow
 
 - Work in small, documented phases.
-- Keep changes aligned with the roadmap issue.
+- Keep changes aligned with the Amadeus issues; keep core changes aligned with Tau's upstream roadmap.
 - Add or update docs when introducing architectural concepts.
 - Add tests for behavior before expanding features.
 - Run tests and Python commands through `uv` (for example, `uv run pytest` or `uv run python ...`) so they use the project environment.
@@ -76,6 +121,8 @@ Each substantial phase should leave behind beginner-friendly notes under `dev-no
 - how it maps to Pi's design
 - how to test or use it
 
-When a phase adds or changes user-facing behavior, also update the published docs
-under `website/content/` (the "Use Tau" guides and reference).
+When a phase adds or changes user-facing behavior, also update the docs under
+`website/content/`. Note that Amadeus does not publish this site; the
+`website/content/` guides are inherited from Tau and are kept for local preview
+and future use.
 

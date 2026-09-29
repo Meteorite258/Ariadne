@@ -1,10 +1,16 @@
-# Contributing to Tau
+# Contributing to Amadeus
 
-Thanks for helping improve Tau. Tau is both a usable terminal coding agent and a teaching codebase for understanding how coding agents are built. Contributions should preserve that dual purpose: make the tool better while keeping the architecture small, readable, and easy to learn from.
+Amadeus is a downstream fork of [Tau](https://github.com/huggingface/tau). It
+keeps Tau's layered architecture and adds the `tau_incident` domain package and
+the `tau_coding/incident` application assembly on top. Contributions should
+preserve both purposes: keep the reusable Tau core small and readable, and keep
+incident-specific behavior out of that core.
+
+The distribution is named `amadeus`; the CLI command remains `tau`.
 
 ## Project philosophy
 
-Tau is organized around three layers:
+Amadeus builds on Tau's three layers:
 
 ```text
 tau_ai      provider/model streaming layer
@@ -124,15 +130,14 @@ website/content/
 
 ## Release process
 
-Tau is published to PyPI as `tau-ai`. Publishing is a production release action,
-not a side effect of every commit merged to `main`.
+Amadeus is a fork and is **not published to PyPI**. It is installed from a
+checkout (see the README). Bumping `[project].version` in `pyproject.toml` is a
+normal, reviewed change; there is no automated publishing pipeline wired for
+this fork.
 
-To prepare a release, intentionally bump `[project].version` in `pyproject.toml`
-and merge that change through a pull request. The PyPI workflow publishes only
-when it detects that version change, or when a maintainer uses an explicit
-release trigger such as a published GitHub Release or manual workflow dispatch.
-See [dev-notes/release-process.md](dev-notes/release-process.md) for the full
-process.
+If Amadeus is ever published under its own distribution name, add a release
+process here first and keep the inherited `dev-notes/release-process.md` notes
+as historical reference for Tau's upstream process.
 
 ## Pull request guidelines
 
@@ -148,8 +153,15 @@ Avoid unrelated refactors in feature or bug-fix PRs. If a larger design change i
 
 ## Roadmap alignment
 
-Tau is developed incrementally. For larger changes, check the roadmap issue before starting:
+Amadeus is developed incrementally. For larger changes, check this repository's
+issues before starting:
+
+<https://github.com/Meteorite258/Amadeus/issues>
+
+Changes that only concern the reusable Tau core should stay aligned with Tau's
+upstream roadmap:
 
 <https://github.com/huggingface/tau/issues/1>
 
-When in doubt, favor the smallest step that preserves the architecture and teaches the design clearly.
+When in doubt, favor the smallest step that preserves the architecture and
+teaches the design clearly.

@@ -1,9 +1,11 @@
 name: Publish Python package
 
+# Amadeus is a fork and is not published to PyPI. Automatic publishing on
+# GitHub releases is disabled so a release cannot accidentally push the renamed
+# `amadeus` distribution. Re-add the trigger only after setting up an explicit
+# release process.
 on:
-  release:
-    types:
-      - published
+  workflow_dispatch:
 
 
 permissions: {}

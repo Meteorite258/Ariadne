@@ -1,28 +1,40 @@
 <p align="center">
-  <img src="docs/assets/tau-header.svg" alt="Tau — a Python coding-agent harness inspired by Pi" width="100%" />
+  <img src="docs/assets/tau-header.svg" alt="Amadeus — an incident-investigation agent built on the Tau harness" width="100%" />
 </p>
 
 <p align="center">
-  <strong>A small, readable terminal coding agent — and a working example of how coding agents are built.</strong>
+  <strong>An incident-investigation agent built on Tau's small, readable coding-agent harness.</strong>
 </p>
 
 <p align="center">
-  <a href="https://twotimespi.dev/">Documentation</a>
+  <a href="https://github.com/Meteorite258/Amadeus">Repository</a>
   ·
-  <a href="https://twotimespi.dev/quickstart/">Quickstart</a>
+  <a href="https://github.com/Meteorite258/Amadeus/issues">Issues</a>
   ·
-  <a href="https://twotimespi.dev/internals/architecture/">Architecture</a>
-  ·
-  <a href="https://pypi.org/project/tau-ai/">PyPI</a>
-  ·
-  <a href="https://github.com/huggingface/tau/issues/1">Roadmap</a>
-</p>
-
-<p align="center">
-  <strong><a href="https://link.alejandro-ao.com/tau-discord">Join the Tau Discord community →</a></strong>
+  <a href="https://github.com/huggingface/tau">Tau upstream</a>
 </p>
 
 ---
+
+## What is Amadeus?
+
+**Amadeus is a downstream fork of [Tau](https://github.com/huggingface/tau)**, a
+Pi-style Python coding-agent harness. Amadeus keeps Tau's layered architecture
+(`tau_ai` → `tau_agent` → `tau_coding`) and adds a long-running
+**incident-investigation** capability on top:
+
+- `tau_incident` — the domain package: persistent cases, evidence, submission
+  protocol, planning, task execution, context, budgets and recovery, review,
+  reporting, and cross-case memory.
+- `tau_coding/incident` — application assembly: the incident host, run queue,
+  daemon, alert intake, HTTP/RPC/TUI entry points, and telemetry/Docker/OTel
+  adapters.
+
+The reusable Tau core stays free of incident concepts. For how the fork is
+maintained — layering rules, upstream sync, and what may be committed back to
+Tau — see [`dev-notes/`](dev-notes/) and [`AGENTS.md`](AGENTS.md).
+
+The distribution is named `amadeus`; the CLI command remains `tau`.
 
 ## What is Tau?
 
@@ -58,60 +70,13 @@ or rendering. Frontends consume events.
 
 ## Install
 
-Tau is published on PyPI as `tau-ai` and installs a `tau` command.
-It requires Python 3.12 or newer. The recommended installers use
-[`uv`](https://docs.astral.sh/uv/) and install it first when necessary.
-
-macOS and Linux:
+Amadeus is not published to PyPI. Install it from a checkout. It requires
+Python 3.12 or newer and uses [`uv`](https://docs.astral.sh/uv/). The
+distribution is named `amadeus` while the CLI command stays `tau`.
 
 ```bash
-curl -LsSf https://twotimespi.dev/install.sh | sh
-```
-
-Windows PowerShell:
-
-```powershell
-irm https://twotimespi.dev/install.ps1 | iex
-```
-
-The installers do not use `sudo`. They announce before installing `uv`, install
-Tau in an isolated tool environment, verify `tau --version`, and report if a
-shell restart is needed. You can [inspect the shell installer](https://twotimespi.dev/install.sh)
-or [PowerShell installer](https://twotimespi.dev/install.ps1) before running it.
-
-Already have a package manager? Install Tau directly:
-
-```bash
-uv tool install tau-ai
-# or
-pipx install tau-ai
-# or
-python -m pip install tau-ai
-```
-
-Then check it worked:
-
-```bash
-tau --version
-```
-
-Tau is also available on [conda-forge](https://conda-forge.org), and can be installed using [pixi](https://pixi.prefix.dev/latest/#installation):
-
-```bash
-pixi global install tau-ai
-```
-
-Upgrade a normal installation with:
-
-```bash
-tau update
-```
-
-For local development:
-
-```bash
-git clone https://github.com/huggingface/tau.git
-cd tau
+git clone https://github.com/Meteorite258/Amadeus.git
+cd Amadeus
 uv sync --dev
 uv run tau --version
 ```
@@ -233,14 +198,15 @@ uv run ruff format --check .
 uv run mypy
 ```
 
-Run Tau from the checkout:
+Run Amadeus from the checkout:
 
 ```bash
 uv run tau
 uv run tau -p "explain this repo"
 ```
 
-Run the Hugo documentation site:
+The Hugo documentation site under `website/` is kept in the repo but is **not
+published** in this fork. Preview it locally with:
 
 ```bash
 cd website
@@ -251,21 +217,19 @@ Open <http://localhost:1313/>. Build with `hugo --minify`.
 
 ## Documentation
 
-User docs are published at <https://twotimespi.dev/> and live in
-`website/content/`.
+Amadeus's own engineering notes live in [`dev-notes/`](dev-notes/); the
+authoritative design and status records are under
+[`dev-notes/design/`](dev-notes/design/) and
+[`dev-notes/architecture/`](dev-notes/architecture/). The user-facing guides in
+`website/content/` are inherited from Tau and are not published by this fork.
 
-Useful entry points:
+For Tau's published documentation, see
+<https://twotimespi.dev/> (upstream).
 
-- [What is Tau?](https://twotimespi.dev/what-is-tau/)
-- [Quickstart](https://twotimespi.dev/quickstart/)
-- [Core concepts](https://twotimespi.dev/concepts/)
-- [Architecture overview](https://twotimespi.dev/internals/architecture/)
-- [The agent loop & events](https://twotimespi.dev/internals/agent-loop/)
-- [CLI reference](https://twotimespi.dev/reference/cli/)
-
-Tau is under active development. The implementation roadmap is tracked in
-[GitHub issue #1](https://github.com/huggingface/tau/issues/1).
+Fork-level maintenance, layering rules, and upstream sync are described in
+[`AGENTS.md`](AGENTS.md). Amadeus work is tracked in this repository's
+[issues](https://github.com/Meteorite258/Amadeus/issues).
 
 ## License
 
-Tau is released under the [MIT License](LICENSE).
+Amadeus is a fork of Tau and is released under the same [MIT License](LICENSE).

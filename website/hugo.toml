@@ -1,6 +1,6 @@
-baseURL = "https://twotimespi.dev/"
+baseURL = "http://localhost:1313/"
 languageCode = "en-us"
-title = "Tau"
+title = "Amadeus (fork of Tau)"
 enableRobotsTXT = true
 publishDir = "public"
 
@@ -14,16 +14,11 @@ publishDir = "public"
   noClasses = false
   style = "monokai"
 
-[services]
-  [services.googleAnalytics]
-    id = "G-3KBLC76BV0"
-
 [params]
-  description = "An educational Python project for learning how coding agents are built."
-  githubUrl = "https://github.com/huggingface/tau"
-  discordUrl = "https://link.alejandro-ao.com/tau-discord"
-  editRepoUrl = "https://github.com/huggingface/tau/edit/main/website/content"
-  githubRepo = "huggingface/tau"
+  description = "Amadeus — a downstream fork of Tau. This documentation site is not published."
+  githubUrl = "https://github.com/Meteorite258/Amadeus"
+  editRepoUrl = "https://github.com/Meteorite258/Amadeus/edit/main/website/content"
+  githubRepo = "Meteorite258/Amadeus"
 
 [outputs]
   home = ["HTML", "RSS"]
