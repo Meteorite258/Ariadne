@@ -47,6 +47,6 @@ User-facing documentation lives in `website/content/` and is published at
   validation, lifecycle hardening, migration, and security decisions.
 
 Amadeus work is tracked in this repository's
-[issues](https://github.com/Meteorite258/Amadeus/issues); the reusable Tau core
+[issues](https://github.com/Meteorite258/Ariadne/issues); the reusable Tau core
 still follows Tau's upstream
 [GitHub issue #1](https://github.com/huggingface/tau/issues/1).

@@ -48,7 +48,7 @@ Amadeus work in separate commits so core changes stay easy to cherry-pick.
 
 Amadeus work is tracked in this repository's issues:
 
-- <https://github.com/Meteorite258/Amadeus/issues>
+- <https://github.com/Meteorite258/Ariadne/issues>
 
 Tau's upstream roadmap still governs phase ordering and architectural intent for
 the reusable core:

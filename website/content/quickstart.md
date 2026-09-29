@@ -14,7 +14,7 @@ checkout using [`uv`](https://docs.astral.sh/uv/); it requires Python 3.12 or
 newer. The distribution is named `amadeus` and the CLI command remains `tau`.
 
 ```bash
-git clone https://github.com/Meteorite258/Amadeus.git
+git clone https://github.com/Meteorite258/Ariadne.git
 cd Amadeus
 uv sync --dev
 ```

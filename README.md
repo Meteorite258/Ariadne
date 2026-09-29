@@ -7,9 +7,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Meteorite258/Amadeus">Repository</a>
+  <a href="https://github.com/Meteorite258/Ariadne">Repository</a>
   ·
-  <a href="https://github.com/Meteorite258/Amadeus/issues">Issues</a>
+  <a href="https://github.com/Meteorite258/Ariadne/issues">Issues</a>
   ·
   <a href="https://github.com/huggingface/tau">Tau upstream</a>
 </p>
@@ -75,7 +75,7 @@ Python 3.12 or newer and uses [`uv`](https://docs.astral.sh/uv/). The
 distribution is named `amadeus` while the CLI command stays `tau`.
 
 ```bash
-git clone https://github.com/Meteorite258/Amadeus.git
+git clone https://github.com/Meteorite258/Ariadne.git
 cd Amadeus
 uv sync --dev
 uv run tau --version
@@ -228,7 +228,7 @@ For Tau's published documentation, see
 
 Fork-level maintenance, layering rules, and upstream sync are described in
 [`AGENTS.md`](AGENTS.md). Amadeus work is tracked in this repository's
-[issues](https://github.com/Meteorite258/Amadeus/issues).
+[issues](https://github.com/Meteorite258/Ariadne/issues).
 
 ## License
 

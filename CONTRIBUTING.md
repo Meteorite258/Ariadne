@@ -156,7 +156,7 @@ Avoid unrelated refactors in feature or bug-fix PRs. If a larger design change i
 Amadeus is developed incrementally. For larger changes, check this repository's
 issues before starting:
 
-<https://github.com/Meteorite258/Amadeus/issues>
+<https://github.com/Meteorite258/Ariadne/issues>
 
 Changes that only concern the reusable Tau core should stay aligned with Tau's
 upstream roadmap:

@@ -16,9 +16,9 @@ publishDir = "public"
 
 [params]
   description = "Amadeus — a downstream fork of Tau. This documentation site is not published."
-  githubUrl = "https://github.com/Meteorite258/Amadeus"
-  editRepoUrl = "https://github.com/Meteorite258/Amadeus/edit/main/website/content"
-  githubRepo = "Meteorite258/Amadeus"
+  githubUrl = "https://github.com/Meteorite258/Ariadne"
+  editRepoUrl = "https://github.com/Meteorite258/Ariadne/edit/main/website/content"
+  githubRepo = "Meteorite258/Ariadne"
 
 [outputs]
   home = ["HTML", "RSS"]

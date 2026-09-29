@@ -4,7 +4,7 @@
     var b = document.getElementById(id);
     if(!b) return;
     b.addEventListener("click", function(){
-      navigator.clipboard && navigator.clipboard.writeText("uv tool install git+https://github.com/Meteorite258/Amadeus");
+      navigator.clipboard && navigator.clipboard.writeText("uv tool install git+https://github.com/Meteorite258/Ariadne");
       var t = b.textContent; b.textContent = "copied";
       setTimeout(function(){ b.textContent = t; }, 1400);
     });

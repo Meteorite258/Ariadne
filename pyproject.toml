@@ -25,8 +25,8 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/Meteorite258/Amadeus"
-Issues = "https://github.com/Meteorite258/Amadeus/issues"
+Repository = "https://github.com/Meteorite258/Ariadne"
+Issues = "https://github.com/Meteorite258/Ariadne/issues"
 
 [project.scripts]
 tau = "tau_coding.cli:app"
