@@ -39,7 +39,8 @@ from tau_agent.provider_events import (
     ToolCallEndEvent,
     ToolCallStartEvent,
 )
-from tau_agent.tool_history import repair_tool_history
+from tau_agent.request_context import RequestContext, RequestContextHook
+from tau_agent.tool_history import repair_tool_history, validate_tool_projection
 from tau_agent.tools import AgentTool, AgentToolResult
 
 BeforeToolCall = Callable[[ToolCall], Awaitable[tuple[bool, str | None]]]
@@ -65,6 +66,7 @@ async def run_agent_loop(
     get_follow_up_messages: Callable[[], Sequence[AgentMessage]] | None = None,
     before_tool_call: BeforeToolCall | None = None,
     after_tool_call: AfterToolCall | None = None,
+    request_context_hook: RequestContextHook | None = None,
 ) -> AsyncIterator[AgentEvent]:
     """Run the provider/tool loop and emit Pi-compatible agent events."""
     new_messages = list(prompts)
@@ -122,12 +124,26 @@ async def run_agent_loop(
             # Python async generators cannot pass a yielding callback through a
             # normal await cleanly, so consume the assistant sub-generator and
             # retain its final message through the terminal event.
+            request_messages = _provider_context(messages)
+            request_system = system
+            if request_context_hook is not None:
+                projected = await request_context_hook(
+                    RequestContext(
+                        system=system,
+                        messages=tuple(
+                            message.model_copy(deep=True) for message in request_messages
+                        ),
+                    )
+                )
+                validate_tool_projection(tuple(request_messages), projected.messages)
+                request_messages = list(projected.messages)
+                request_system = projected.system
             assistant = None
             async for event in _assistant_events(
                 provider=provider,
                 model=model,
-                system=system,
-                messages=_provider_context(messages),
+                system=request_system,
+                messages=request_messages,
                 tools=tools,
                 signal=signal,
                 session_id=session_id,

@@ -372,8 +372,8 @@ class OpenAICompatibleProvider:
                             return
                         continue
                     yield ProviderErrorEvent(
-                        message=str(exc),
-                        data={"attempts": attempt + 1},
+                        message=str(exc) or type(exc).__name__,
+                        data={"attempts": attempt + 1, "error_type": type(exc).__name__},
                     )
                     return
 
@@ -834,7 +834,9 @@ def _build_chat_payload(
     _apply_chat_reasoning(
         payload,
         reasoning_effort=(
-            reasoning_effort if supports_reasoning_effort or thinking_format == "zai" else None
+            reasoning_effort
+            if supports_reasoning_effort or thinking_format in {"zai", "longcat"}
+            else None
         ),
         reasoning_effort_parameter=reasoning_effort_parameter,
         thinking_format=thinking_format,
@@ -858,9 +860,10 @@ def _apply_chat_reasoning(
     supports_reasoning_effort: bool = True,
 ) -> None:
     reasoning_enabled = reasoning_effort is not None and reasoning_effort != "none"
-    if thinking_format == "zai":
+    if thinking_format in {"zai", "longcat"}:
         # Z.AI's OpenAI-compatible API uses the provider-specific ``thinking``
-        # object for every GLM model.  Only GLM-5.2+ accepts the separate
+        # object for every GLM model; LongCat uses the same toggle.
+        # Only GLM-5.2+ accepts the separate
         # reasoning_effort field, so keep that decision model-specific via
         # supportsReasoningEffort instead of dropping the logical toggle.
         payload["thinking"] = {"type": "enabled" if reasoning_enabled else "disabled"}

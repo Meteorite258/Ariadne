@@ -42,6 +42,7 @@ from tau_agent.messages import (
     content_text,
     message_text,
 )
+from tau_agent.request_context import RequestContext, RequestContextHook
 from tau_agent.session import (
     BranchSummaryEntry,
     CompactionEntry,
@@ -56,6 +57,11 @@ from tau_agent.session import (
     SessionInfoEntry,
     SessionState,
     ThinkingLevelChangeEntry,
+)
+from tau_agent.tool_history import (
+    MessageProtocolError,
+    validate_tool_history,
+    validate_tool_projection,
 )
 from tau_agent.tools import (
     AgentTool,

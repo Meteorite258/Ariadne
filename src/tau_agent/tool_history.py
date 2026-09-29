@@ -16,6 +16,64 @@ from tau_agent.messages import (
 _INTERRUPTED_TOOL_RESULT = "Tool call interrupted by user"
 
 
+class MessageProtocolError(ValueError):
+    """A projected transcript is invalid; it must not be silently repaired."""
+
+
+def validate_tool_history(messages: tuple[AgentMessage, ...]) -> None:
+    pending: dict[str, str] = {}
+    seen: set[str] = set()
+    for message in messages:
+        if isinstance(message, ToolResultMessage):
+            if pending.get(message.tool_call_id) != message.tool_name:
+                raise MessageProtocolError("orphan, duplicate or mismatched tool result")
+            del pending[message.tool_call_id]
+            continue
+        if pending:
+            raise MessageProtocolError("tool result group is incomplete or non-adjacent")
+        if isinstance(message, AssistantMessage):
+            for call in message.tool_calls:
+                if not call.id or call.id in seen:
+                    raise MessageProtocolError("tool call IDs must be nonempty and unique")
+                seen.add(call.id)
+                pending[call.id] = call.name
+    if pending:
+        raise MessageProtocolError("missing tool results")
+
+
+def validate_tool_projection(
+    original: tuple[AgentMessage, ...], projected: tuple[AgentMessage, ...]
+) -> None:
+    """Projection may omit a whole call group, but cannot split or forge one."""
+    validate_tool_history(projected)
+    groups = {
+        call.id: message
+        for message in original
+        if isinstance(message, AssistantMessage)
+        for call in message.tool_calls
+    }
+    results = {
+        message.tool_call_id: message
+        for message in original
+        if isinstance(message, ToolResultMessage)
+    }
+    for message in projected:
+        if isinstance(message, AssistantMessage) and message.tool_calls:
+            first = message.tool_calls[0]
+            source = groups.get(first.id)
+            if source is None or message.tool_calls != source.tool_calls:
+                raise MessageProtocolError("projection split or altered a tool-call group")
+        if isinstance(message, ToolResultMessage):
+            result = results.get(message.tool_call_id)
+            if result is None or (result.tool_name, result.is_error) != (
+                message.tool_name,
+                message.is_error,
+            ):
+                raise MessageProtocolError(
+                    "projection altered tool result identity or error status"
+                )
+
+
 @dataclass(frozen=True, slots=True)
 class ToolHistoryRepair:
     """A provider-safe transcript plus a summary of deterministic repairs."""

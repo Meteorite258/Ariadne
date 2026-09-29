@@ -19,6 +19,7 @@ from tau_agent.messages import (
     UserMessage,
 )
 from tau_agent.provider import ModelProvider
+from tau_agent.request_context import RequestContextHook
 from tau_agent.tools import AgentTool
 
 EventListener = Callable[[AgentEvent], Awaitable[None] | None]
@@ -46,6 +47,7 @@ class AgentHarnessConfig:
     session_id: str | None = None
     before_tool_call: BeforeToolCall | None = None
     after_tool_call: AfterToolCall | None = None
+    request_context_hook: RequestContextHook | None = None
 
 
 class SimpleCancellationToken:
@@ -186,6 +188,7 @@ class AgentHarness:
                 get_follow_up_messages=self._drain_follow_up_messages,
                 before_tool_call=self._config.before_tool_call,
                 after_tool_call=self._config.after_tool_call,
+                request_context_hook=self._config.request_context_hook,
             ):
                 await self._notify(event)
                 yield event

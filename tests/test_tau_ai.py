@@ -46,6 +46,25 @@ async def _collect(stream: AsyncIterator[object]) -> list[object]:
     return [event async for event in stream]
 
 
+@pytest.mark.anyio
+async def test_openai_compatible_empty_timeout_has_visible_error_type() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise httpx.ReadTimeout("", request=request)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        provider = OpenAICompatibleProvider(
+            OpenAICompatibleConfig(api_key="test", max_retries=0), client=client
+        )
+        events = await _collect(
+            provider.stream_response(
+                model="fake", system="test", messages=[UserMessage(content="go")], tools=[]
+            )
+        )
+    terminal = events[-1]
+    assert isinstance(terminal, AssistantErrorEvent)
+    assert terminal.error.error_message == "ReadTimeout"
+
+
 def _provider_tool(
     name: str,
     description: str,
