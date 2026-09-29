@@ -1,0 +1,4 @@
+services:
+  checkout:
+    environment:
+      PAYMENT_ADDR: payment-old:50051

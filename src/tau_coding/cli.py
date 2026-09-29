@@ -117,6 +117,8 @@ app = typer.Typer(
   tau providers - List configured model providers.
 
   tau setup - Configure an OpenAI-compatible provider.
+
+  tau incident new/show/observe/report/run - Manage and investigate incidents.
 """,
     add_completion=False,
     context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
@@ -464,6 +466,14 @@ def main(
 
     if models:
         raise typer.BadParameter("--models is only supported with `tau update`")
+
+    if not rpc_requested and not print_requested and not export and command == "incident":
+        from tau_coding.incident.cli import incident_command
+
+        incident_command(
+            positional_args[1:], cwd=cwd or Path.cwd(), provider_name=provider, model=model
+        )
+        raise typer.Exit()
 
     if not rpc_requested and not print_requested and not export and command == "install":
         install_command(positional_args[1:])

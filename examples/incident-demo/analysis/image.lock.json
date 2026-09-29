@@ -1,0 +1,7 @@
+{
+  "image": "amadeus-analysis@sha256:397f3038f805f3b754bc38170827c76fa22b7880dd483648891183d31f6704e2",
+  "platform": "linux/amd64",
+  "base": "python:3.12.10-slim-bookworm@sha256:fd95fa221297a88e1cf49c55ec1828edd7c5a428187e67b5d1805692d11588db",
+  "built_at": "2026-09-28",
+  "availability": "local Docker Desktop build; not published to a registry"
+}

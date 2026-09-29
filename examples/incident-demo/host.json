@@ -1,0 +1,20 @@
+{
+  "environment": "amadeus-demo",
+  "bind": "127.0.0.1",
+  "port": 8765,
+  "endpoint": "http://127.0.0.1:8765",
+  "token_env": "AMADEUS_INCIDENT_TOKEN",
+  "webhook_token_env": "AMADEUS_ALERT_TOKEN",
+  "allow_remote": false,
+  "services_config": "live.json",
+  "jaeger_url": "http://127.0.0.1:16686",
+  "auto_start": {
+    "environments": [],
+    "services": [],
+    "severities": [],
+    "max_running_cases": 2,
+    "max_queued_cases": 100,
+    "correlation_seconds": 900,
+    "limits": {"concurrency": 2, "global_concurrency": 8, "checkpoint_steps": null, "token_limit": null}
+  }
+}

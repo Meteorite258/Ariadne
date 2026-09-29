@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "name": "Checkout latency replay",
+  "rows": [
+    {"kind": "metrics", "environment": "demo", "entity": "checkout", "data_at": "2026-09-26T00:05:00Z", "available_at": "2026-09-26T00:05:30Z", "body": {"metric": "request_duration_p95", "value": 2.4, "window_seconds": 60}, "units": "seconds"},
+    {"kind": "metrics", "environment": "demo", "entity": "checkout", "data_at": "2026-09-26T00:06:00Z", "available_at": "2026-09-26T00:08:00Z", "body": {"metric": "request_duration_p95", "value": 2.7, "window_seconds": 60}, "units": "seconds"},
+    {"kind": "logs", "environment": "demo", "entity": "checkout", "data_at": "2026-09-26T00:05:12Z", "available_at": "2026-09-26T00:05:20Z", "body": {"level": "warn", "message": "upstream request timed out", "peer": "catalog-v1", "trace_id": "business-01"}},
+    {"kind": "traces", "environment": "demo", "entity": "checkout", "data_at": "2026-09-26T00:05:12Z", "available_at": "2026-09-26T00:07:00Z", "body": {"trace_id": "business-01", "peer": "catalog-v1", "duration_ms": 2300, "status": "deadline_exceeded"}, "units": "milliseconds"},
+    {"kind": "deployments", "environment": "demo", "entity": "checkout", "data_at": "2026-09-26T00:04:00Z", "available_at": "2026-09-26T00:04:01Z", "body": {"deployment": "checkout-r12", "configuration_version": "checkout-config-7"}},
+    {"kind": "configuration", "environment": "demo", "entity": "checkout", "data_at": "2026-09-26T00:04:00Z", "available_at": "2026-09-26T00:04:01Z", "body": {"version": "checkout-config-7", "catalog_endpoint": "catalog-v1", "request_timeout_ms": 2300}}
+  ],
+  "coverage": [
+    {"kind": "metrics", "scope": {"environment": "demo", "entities": ["checkout"], "time_window": {"start": "2026-09-26T00:05:00Z", "end": "2026-09-26T00:06:00Z"}}, "available_at": "2026-09-26T00:08:00Z", "sampled": false, "note": "Replay contains two exported p95 aggregate points; not individual requests."},
+    {"kind": "traces", "scope": {"environment": "demo", "entities": ["checkout"], "time_window": {"start": "2026-09-26T00:05:00Z", "end": "2026-09-26T00:06:00Z"}}, "available_at": "2026-09-26T00:07:00Z", "sampled": true, "note": "Sampled business traces only; missing traces cannot establish healthy behavior."}
+  ],
+  "catalog": [
+    {"version": "demo-topology-1", "scope": {"environment": "demo", "entities": ["checkout", "catalog-v1", "catalog-v2"], "time_window": {"start": "2026-09-26T00:00:00Z", "end": "2026-09-26T01:00:00Z"}}, "available_at": "2026-09-26T00:00:00Z", "entities": ["checkout", "catalog-v1", "catalog-v2"], "edges": [["checkout", "catalog-v1"], ["checkout", "catalog-v2"]], "configuration": {"source": "exported service catalog", "edge_semantics": "configured destinations; reachability unverified"}}
+  ]
+}

@@ -1,0 +1,86 @@
+# Pinned Collector 0.120.0. No host filesystem or Docker socket receivers.
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+        cors:
+          allowed_origins: ["http://localhost:8080"]
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 160
+    spike_limit_mib: 32
+  batch:
+    timeout: 1s
+  filter/business:
+    error_mode: ignore
+    traces:
+      span:
+        - 'resource.attributes["service.name"] == "amadeus-agent"'
+        - 'resource.attributes["service.name"] == "flagd"'
+        - 'resource.attributes["service.name"] == "flagd-ui"'
+      spanevent:
+        - 'IsMatch(name, "(?i).*feature.flag.*|.*flagd.*")'
+        - 'attributes["feature_flag.key"] != nil'
+        - 'attributes["feature.flag.key"] != nil'
+    logs:
+      log_record:
+        - 'resource.attributes["service.name"] == "amadeus-agent"'
+  filter/agent:
+    error_mode: ignore
+    traces:
+      span:
+        - 'resource.attributes["service.name"] != "amadeus-agent"'
+  filter/answers:
+    error_mode: ignore
+    logs:
+      log_record:
+        - 'resource.attributes["service.name"] == "flagd"'
+        - 'resource.attributes["service.name"] == "flagd-ui"'
+        - 'IsMatch(body, "(?i)paymentUnreachable|paymentFailure|feature.flag|flag evaluation")'
+  transform/flags:
+    error_mode: ignore
+    trace_statements:
+      - context: span
+        statements:
+          - 'delete_matching_keys(attributes, "(?i).*feature.flag.*|.*flagd.*")'
+exporters:
+  otlp/business:
+    endpoint: jaeger:4317
+    tls: {insecure: true}
+  otlp/agent:
+    endpoint: jaeger:4317
+    tls: {insecure: true}
+  otlphttp/prometheus:
+    endpoint: http://prometheus:9090/api/v1/otlp
+  opensearch:
+    logs_index: otel
+    http:
+      endpoint: http://opensearch:9200
+      tls: {insecure: true}
+connectors:
+  spanmetrics:
+    dimensions:
+      - name: deployment.environment.name
+        default: amadeus-demo
+service:
+  pipelines:
+    traces/business:
+      receivers: [otlp]
+      processors: [memory_limiter, filter/business, transform/flags, batch]
+      exporters: [otlp/business, spanmetrics]
+    traces/agent:
+      receivers: [otlp]
+      processors: [memory_limiter, filter/agent, batch]
+      exporters: [otlp/agent]
+    metrics:
+      receivers: [otlp, spanmetrics]
+      processors: [memory_limiter, batch]
+      exporters: [otlphttp/prometheus]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, filter/business, filter/answers, batch]
+      exporters: [opensearch]

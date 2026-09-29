@@ -4,12 +4,12 @@ Tau now performs a small, best-effort update check in CLI startup paths that lau
 
 ## What was added
 
-- `tau_coding.update_check` fetches PyPI metadata for the published package (`tau-ai`).
+- `tau_coding.update_check` fetches PyPI metadata for the published package (`amadeus`).
 - Versions are compared with `packaging.version.Version` so PEP 440 releases sort correctly.
 - The result is cached under `~/.tau/cache/update-check.json` and refreshed at most once per day.
 - Failures are quiet no-ops: network errors, malformed JSON, missing fields, and invalid versions do not stop startup.
 - `TAU_NO_UPDATE_CHECK=1` disables the check, and the check is skipped automatically when `CI` is set.
-- `tau update` upgrades `tau-ai` with the package manager that owns the active Tau environment.
+- `tau update` upgrades `amadeus` with the package manager that owns the active Tau environment.
 
 ## Where it belongs
 
@@ -27,7 +27,7 @@ This lives in `tau_coding`, not `tau_agent`, because update notification is CLI 
 `tau update` inspects the active environment before running anything:
 
 - `uv-receipt.toml` means uv owns the tool. Tau fetches the latest stable PyPI
-  version and runs `uv tool install tau-ai@<latest-version>`, explicitly replacing
+  version and runs `uv tool install amadeus@<latest-version>`, explicitly replacing
   any version pin recorded when the tool was installed. On Windows, Tau hands
   this command to a detached PowerShell process. The helper waits for the
   original Tau PID to exit before invoking uv, preventing Windows from partially
@@ -40,8 +40,8 @@ This lives in `tau_coding`, not `tau_agent`, because update notification is CLI 
   helper launches them with non-shell `ProcessStartInfo`, preserving spaces,
   metacharacters, embedded quotes, empty arguments, and trailing backslashes on
   Windows PowerShell 5.1 and PowerShell 7 without interpolated shell execution.
-- `pipx_metadata.json` means pipx owns it, so Tau runs `pipx upgrade tau-ai`.
-- The distribution's standard `INSTALLER` metadata identifies ordinary uv and pip installs. Tau runs either `uv pip install --python <current-python> --upgrade tau-ai` or `<current-python> -m pip install --upgrade tau-ai`, targeting the environment that is running Tau.
+- `pipx_metadata.json` means pipx owns it, so Tau runs `pipx upgrade amadeus`.
+- The distribution's standard `INSTALLER` metadata identifies ordinary uv and pip installs. Tau runs either `uv pip install --python <current-python> --upgrade amadeus` or `<current-python> -m pip install --upgrade amadeus`, targeting the environment that is running Tau.
 
 Tau does not fall through to another installer when the selected command fails. Direct-URL and editable installs are sent back to their original source; Conda/Pixi-managed and unrecognized environments get manual instructions rather than being modified with pip. Editable checkout installs can be refreshed with `uv tool install --editable --force .`.
 

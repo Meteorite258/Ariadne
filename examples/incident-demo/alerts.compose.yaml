@@ -1,0 +1,25 @@
+# Add after upstream/docker-compose.yml and compose.yaml; relative paths use the upstream base directory.
+services:
+  prometheus:
+    volumes:
+      - ../alerts/prometheus.yaml:/etc/prometheus/prometheus-config.yaml:ro
+      - ../alerts/rules.json:/etc/prometheus/amadeus-rules.json:ro
+  alertmanager:
+    image: prom/alertmanager:v0.28.1
+    command: [--config.file=/etc/alertmanager/alertmanager.json, --storage.path=/alertmanager]
+    volumes:
+      - ../alerts/alertmanager.json:/etc/alertmanager/alertmanager.json:ro
+      - amadeus-alertmanager:/alertmanager
+    secrets: [amadeus_alert_token]
+    extra_hosts: [host.docker.internal:host-gateway]
+    ports: [127.0.0.1:9093:9093]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 128m
+    restart: unless-stopped
+secrets:
+  amadeus_alert_token:
+    file: ${AMADEUS_ALERT_TOKEN_FILE:?Set the absolute path to a token file}
+volumes:
+  amadeus-alertmanager:
+
+

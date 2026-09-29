@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mode": "live",
+  "history": "public/environment.json",
+  "live": {
+    "environment": "amadeus-demo",
+    "services": ["accounting", "ad", "cart", "checkout", "currency", "email", "fraud-detection", "frontend", "frontend-proxy", "image-provider", "load-generator", "payment", "product-catalog", "quote", "recommendation", "shipping", "kafka"],
+    "prometheus": {"url": "http://127.0.0.1:9090"},
+    "jaeger": {"url": "http://127.0.0.1:16686/jaeger/ui"},
+    "opensearch": {"url": "http://127.0.0.1:9200"},
+    "metric_names": ["traces_span_metrics_calls_total", "traces_span_metrics_duration_milliseconds_sum", "traces_span_metrics_duration_milliseconds_count"],
+    "metric_units": {"traces_span_metrics_calls_total": "calls", "traces_span_metrics_duration_milliseconds_sum": "milliseconds", "traces_span_metrics_duration_milliseconds_count": "calls"},
+    "log_service_field": "resource.service.name",
+    "log_environment_field": "resource.deployment.environment.name",
+    "log_time_field": "@timestamp",
+    "max_window_seconds": 3600
+  },
+  "analysis_image": null,
+  "analysis_limits": {"timeout_seconds": 30, "cpus": 1, "memory_mb": 256, "pids": 32, "input_bytes": 8388608, "output_bytes": 1048576, "output_files": 16},
+  "otel": {
+    "endpoint": {"url": "http://127.0.0.1:4318/v1/traces", "timeout_seconds": 3},
+    "service": "amadeus-agent",
+    "environment": "amadeus-control",
+    "queue_size": 256,
+    "retries": 2,
+    "flush_seconds": 5
+  }
+}

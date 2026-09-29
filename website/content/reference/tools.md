@@ -122,3 +122,26 @@ kills the whole process group.
 - **`write`** — new files or complete rewrites.
 - **`edit`** — precise changes to an existing file.
 - **`bash`** — tests, linters, searches, project inspection.
+
+## Incident workspace access
+
+Stage 6 (implemented, pending unified verification) exposes evidence, request
+snapshots, command receipts and report provenance through scoped IncidentHost
+queries. These are frontend capabilities; they do not add shell/file or coding
+extension tools to Investigator workers. Alertmanager input and human explanations
+remain source-labelled observations/candidates. Runtime-owned IDs, evidence
+registration, task permissions and isolated analysis continue to govern tool use.
+
+Incident v2 roles also use:
+
+- `save_progress`: nonterminal, version-checked task progress. Runtime validates
+  operation and artifact references; the tool does not complete the task.
+- `context_read`: bounded retrieval of current domain records. Omit the reference
+  to browse a paginated index; fetch records before relying on their contents.
+- `evidence_read`: retrieve registered evidence and original source content.
+- `python_analysis`: isolated Python with `load_evidence(id)` and
+  `describe_evidence(id)` for authorized mounts. JSON, NDJSON, CSV, TSV and text
+  are supported; helpers do not grant additional host or network access.
+
+Formal Findings use runtime-assigned completion condition IDs. A partial Finding
+preserves a stage result and leaves its task ready to continue.

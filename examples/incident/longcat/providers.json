@@ -1,0 +1,9 @@
+{
+  "default_provider": "longcat",
+  "provider_preferences": {
+    "longcat": {
+      "timeout_seconds": 180,
+      "max_retries": 0
+    }
+  }
+}

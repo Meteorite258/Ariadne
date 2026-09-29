@@ -15,7 +15,7 @@ from packaging.version import InvalidVersion, Version
 from tau_ai.http import get_json
 from tau_coding.paths import TauPaths
 
-PYPI_PACKAGE_NAME = "tau-ai"
+PYPI_PACKAGE_NAME = "amadeus"
 PYPI_JSON_URL = f"https://pypi.org/pypi/{PYPI_PACKAGE_NAME}/json"
 UPDATE_CHECK_INTERVAL = timedelta(days=1)
 UPDATE_CHECK_TIMEOUT_SECONDS = 1.5

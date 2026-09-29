@@ -1,0 +1,109 @@
+name: amadeus-demo
+networks:
+  default:
+    name: amadeus-demo
+services:
+  accounting:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  ad:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  cart:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  checkout:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  currency:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  email:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  fraud-detection:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  frontend:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  frontend-proxy:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !override
+      - "127.0.0.1:8080:8080"
+  image-provider:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  load-generator:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  payment:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  product-catalog:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  quote:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  recommendation:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  shipping:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  flagd:
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  flagd-ui:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  kafka:
+    build: !reset null
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  valkey-cart:
+    ports: !reset []
+  jaeger:
+    security_opt: [no-new-privileges:true]
+    ports: !override
+      - "127.0.0.1:16686:16686"
+  grafana:
+    environment:
+      GF_INSTALL_PLUGINS: grafana-opensearch-datasource 2.34.4
+    security_opt: [no-new-privileges:true]
+    ports: !reset []
+  otel-collector:
+    user: "10001:10001"
+    command: ["--config=/etc/otelcol-config.yml"]
+    volumes: !override
+      - ../collector.yaml:/etc/otelcol-config.yml:ro
+    ports: !override
+      - "127.0.0.1:4317:4317"
+      - "127.0.0.1:4318:4318"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+  prometheus:
+    security_opt: [no-new-privileges:true]
+    ports: !override
+      - "127.0.0.1:9090:9090"
+  opensearch:
+    ports: !override
+      - "127.0.0.1:9200:9200"

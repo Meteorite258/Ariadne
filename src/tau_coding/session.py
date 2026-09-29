@@ -85,6 +85,7 @@ from tau_coding.events import (
 from tau_coding.extensions.provider_registry import DynamicProviderRegistry
 from tau_coding.extensions.providers import DynamicProvider, ProviderModel
 from tau_coding.extensions.runtime import ExtensionRuntime
+from tau_coding.incident.rpc import IncidentDispatcher
 from tau_coding.models_dev_store import ModelsDevRefreshResult, refresh_models_dev_catalog
 from tau_coding.oauth import account_id_from_access_token
 from tau_coding.paths import TauPaths
@@ -1421,6 +1422,8 @@ class CodingSession:
             else UserMessage(content=content)
         )
         self._harness.follow_up_message(message)
+
+    incident_dispatcher: IncidentDispatcher | None = None
 
     async def append_custom_entry(self, namespace: str, data: dict[str, JSONValue]) -> None:
         """Persist an extension-owned custom entry on the active branch path.
@@ -3025,6 +3028,14 @@ class CodingSession:
                 await self._extension_runtime.emit_session_shutdown("quit")
         except BaseException as exc:
             error = exc
+
+        try:
+            if self.incident_dispatcher is not None:
+                await self.incident_dispatcher.aclose()
+                self.incident_dispatcher = None
+        except BaseException as exc:
+            if error is None:
+                error = exc
 
         # Final close has no successor sharing the UI bridge. Remove any
         # source-owned widgets/interceptors before invalidating the API.

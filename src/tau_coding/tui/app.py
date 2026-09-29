@@ -4832,6 +4832,11 @@ class TauTuiApp(App[None]):
         self._completion_state = CompletionState()
         self._refresh_completions()
 
+        from tau_coding.incident.session import binding
+
+        if not text.startswith("/") and await binding(self.session) is not None:
+            await self._incident_action("observe " + text)
+            return
         terminal_command = parse_terminal_command(text)
         if terminal_command is not None:
             self.run_worker(
@@ -4846,6 +4851,9 @@ class TauTuiApp(App[None]):
 
         command = self.session.handle_command(text)
         if command.handled:
+            if command.incident_action is not None:
+                await self._incident_action(command.incident_action)
+                return
             if command.clear_requested:
                 self.state.clear()
             if command.reload_requested:
@@ -5036,6 +5044,19 @@ class TauTuiApp(App[None]):
         self._refresh()
         if not self._app_has_focus:
             self._terminal_notification.notify_turn_finished()
+
+    async def _incident_action(self, text: str) -> None:
+        from tau_coding.incident.chat import slash
+        from tau_coding.tui.incident import IncidentWorkspace
+
+        try:
+            output, workspace = await slash(self.session, text)
+            if output:
+                self._show_command_message("/incident", output)
+            if workspace is not None:
+                self.push_screen(IncidentWorkspace(self.session, workspace))
+        except Exception as exc:
+            self._notify(f"Incident: {exc}", severity="error")
 
     async def _submit_prompt(
         self,

@@ -1,0 +1,30 @@
+schema_version = 1
+
+[[providers]]
+name = "longcat"
+display_name = "LongCat"
+kind = "openai-compatible"
+api = "openai-completions"
+base_url = "https://api.longcat.chat/openai/v1"
+api_key_env = "LONGCAT_API_KEY"
+credential_name = "longcat"
+models = ["LongCat-2.5-Preview"]
+default_model = "LongCat-2.5-Preview"
+docs_url = "https://longcat.chat/platform/docs/zh/api/chat"
+thinking_levels = ["off"]
+thinking_default = "off"
+
+[providers.context_windows]
+"LongCat-2.5-Preview" = 1048576
+
+[providers.compat]
+maxTokensField = "max_tokens"
+supportsStore = false
+supportsReasoningEffort = false
+thinkingFormat = "longcat"
+
+[providers.model_metadata."LongCat-2.5-Preview"]
+input = ["text"]
+context_window = 1048576
+max_tokens = 131072
+

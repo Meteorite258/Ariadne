@@ -77,3 +77,40 @@ supported, but `abort_bash` requires a future cancellable session API. Queue del
 retry controls, cloning, image prompts, and the extension UI request/response subprotocol remain
 staged compatibility work. See `dev-notes/design/rpc-runtime-interchangeability-plan.md` for the
 contract, completed frontend-critical phase, and remaining production phases.
+
+## Incident RPC namespace
+
+Stage 6 is **implemented, pending unified verification**. Configure
+`AMADEUS_INCIDENT_CONFIG` and `AMADEUS_INCIDENT_MODE=connect|embedded`, or inject an
+`IncidentDispatcher` into `RpcServer`. Existing Pi commands retain their meanings.
+
+Capability discovery returns the same `commands`, `events`, `cursor_semantics`,
+`project_key` and `environment` fields in embedded and connected modes. The
+`capabilities` field aliases `commands` for HTTP clients. `schema_version` is 2.
+New cases use v2 storage and continuous-investigation semantics. Legacy cases expose
+read-only queries and exports; attempts to run, resume or mutate them fail explicitly.
+
+```json
+{"id":"cap-1","type":"incident.capabilities"}
+{"id":"show-1","type":"incident.query","query":{"case_id":"CASE_ID","view":"brief"}}
+{"id":"events-1","type":"incident.events","query":{"case_id":"CASE_ID","after_cursor":0,"limit":100}}
+{"id":"timeline-1","type":"incident.timeline","query":{"case_id":"CASE_ID","after_cursor":0}}
+{"id":"run-1","type":"incident.dispatch","action":{"request_id":"run-1","operation":"run","case_id":"CASE_ID"}}
+```
+
+Additional commands: `incident.intake` (payload is an Alertmanager v4 or normalized
+message), `incident.inbox` (optional payload.inbox_id for the original delivery),
+and `incident.associate` (payload.update_id and payload.case_id). Query views include
+`evidence`, `request`, `receipt`, `report`, `handoff`, `provenance`, `budget`, `action` and `export`;
+use `reference` for the corresponding ID. Timeline filters: task_id, attempt_id,
+operation_kind, status and error_category. Empty filtered pages can advance the cursor.
+Export returns a file-name to base64-content mapping with a SHA256 manifest. Domain
+events and execution/request ledgers are separate exported sources.
+
+Responses use the existing correlated JSONL response envelope and serialized writer.
+Event polling returns `incident.events` or `incident.timeline` data and next_cursor;
+each stream has its own durable cursor. `agent_end`, `agent_settled` and coding `abort`
+do not end or pause a Case. Use a lifecycle Command for incident pause/cancel.
+The HTTP service additionally exposes authenticated POST `/events` and `/timeline`
+SSE streams; reconnect with the last cursor in the query body. Client disconnect
+closes transport only in daemon mode.

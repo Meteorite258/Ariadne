@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "access": "controller-only; never export or mount into investigator",
+  "scenarios": [
+    {"id": "payment-unreachable", "type": "feature_flag", "flag": "paymentUnreachable", "variant": "on", "reset_variant": "off", "expected": "checkout calls an incorrect payment endpoint; not deployment history"},
+    {"id": "checkout-deployment-endpoint", "type": "deployment", "service": "checkout", "field": "PAYMENT_ADDR", "before": "payment:50051", "after": "payment-old:50051", "expected": "actual checkout environment change with before/after Compose and container receipt"}
+  ]
+}

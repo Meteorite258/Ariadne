@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from importlib.metadata import PackageNotFoundError, version
 
-_DISTRIBUTION_NAME = "tau-ai"
+_DISTRIBUTION_NAME = "amadeus"
 _UNKNOWN_VERSION = "0+unknown"
 
 

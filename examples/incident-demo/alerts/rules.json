@@ -1,0 +1,9 @@
+{
+  "groups": [{"name": "amadeus-demo", "rules": [{
+    "alert": "CheckoutServerErrors",
+    "expr": "sum(rate(traces_span_metrics_calls_total{service_name=\"checkout\",status_code=\"STATUS_CODE_ERROR\"}[5m])) > 0.1",
+    "for": "2m",
+    "labels": {"environment": "amadeus-demo", "service": "checkout", "severity": "warning"},
+    "annotations": {"summary": "Checkout error spans exceed the configured demo threshold"}
+  }]}]
+}

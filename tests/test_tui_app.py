@@ -971,7 +971,7 @@ def test_session_sidebar_brand_includes_current_version() -> None:
 
     console.print(_sidebar_brand(theme=TAU_DARK_THEME))
 
-    assert "τ = 2π  0.4.5" in console.export_text()
+    assert "τ = 2π  0.1.0" in console.export_text()
 
 
 def test_session_sidebar_uses_prominent_title_and_accented_section_headers() -> None:
@@ -7496,7 +7496,9 @@ async def test_tui_tree_labels_filter_timestamps_and_clear() -> None:
 
         await pilot.press("ctrl+l")
         await pilot.pause()
-        assert "2023-11-14" in str(tree_list.children[2].query_one(Label).render())
+        # The UI renders local time, including timezones east of UTC.
+        expected_timestamp = datetime.fromtimestamp(1_700_000_001.0).strftime("%Y-%m-%d %H:%M")
+        assert expected_timestamp in str(tree_list.children[2].query_one(Label).render())
 
         await pilot.press("ctrl+f")
         await pilot.pause()

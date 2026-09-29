@@ -19,6 +19,7 @@ from tau_agent.session.entries import SessionEntry
 from tau_agent.types import JSONValue
 from tau_coding.commands import CommandRegistry
 from tau_coding.events import CodingSessionEvent
+from tau_coding.incident.rpc import IncidentDispatcher
 from tau_coding.provider_config import (
     AnthropicProviderConfig,
     OpenAICompatibleProviderConfig,
@@ -149,7 +150,9 @@ class RpcServer:
         *,
         stdin: IO[str] | None = None,
         stdout: IO[str] | None = None,
+        incident_dispatcher: IncidentDispatcher | None = None,
     ) -> None:
+        self._incident_dispatcher = incident_dispatcher
         self._session = session
         self._stdin = stdin or sys.stdin
         self._stdout = stdout or sys.stdout
@@ -184,7 +187,11 @@ class RpcServer:
                 await self._dispatch(cast(dict[str, object], value), tasks)
             if self._active_prompt_tasks:
                 self._session.cancel()
-        await self._session.aclose()
+        try:
+            if self._incident_dispatcher is not None:
+                await self._incident_dispatcher.aclose()
+        finally:
+            await self._session.aclose()
 
     async def _dispatch(self, command: dict[str, object], tasks: anyio.abc.TaskGroup) -> None:
         request_id = command.get("id")
@@ -193,6 +200,17 @@ class RpcServer:
             await self._error(request_id, "parse", "Command requires a string 'type'")
             return
         try:
+            if command_type.startswith("incident."):
+                if self._incident_dispatcher is not None:
+                    incident_result = await self._incident_dispatcher.dispatch(command)
+                elif isinstance(self._session, CodingSession):
+                    from tau_coding.incident.session import session_dispatch
+
+                    incident_result = await session_dispatch(self._session, command)
+                else:
+                    raise ValueError("incident capability is not configured")
+                await self._response(request_id, command_type, incident_result)
+                return
             if command_type in {"prompt", "steer", "follow_up"}:
                 message = _required_string(command, "message")
                 behavior: Literal["steer", "follow_up"] | None = None
@@ -539,8 +557,12 @@ class RpcServer:
     async def _write(self, value: object) -> None:
         payload = json.dumps(_jsonable(value), ensure_ascii=False, separators=(",", ":"))
         async with self._write_lock:
-            self._stdout.write(payload + "\n")
-            self._stdout.flush()
+            await anyio.to_thread.run_sync(self._write_payload, payload)
+
+    def _write_payload(self, payload: str) -> None:
+        """A slow JSONL pipe must not block an embedded incident event loop."""
+        self._stdout.write(payload + "\n")
+        self._stdout.flush()
 
 
 def _required_string(command: Mapping[str, object], key: str) -> str:

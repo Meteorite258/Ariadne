@@ -17,7 +17,7 @@ tau [OPTIONS] [PROMPT] [COMMAND] [ARGS]
 - Put flags before the prompt — Tau treats everything after the last recognized flag as prompt text, including tokens that look like flags.
 
 On TUI and text print-mode startup, Tau may show a non-blocking notice when a
-newer `tau-ai` release is available on PyPI. In the TUI, this notice is the first
+newer `amadeus` release is available on PyPI. In the TUI, this notice is the first
 transcript item and appears in bright yellow. Run `tau update` to upgrade. Disable
 the check with `TAU_NO_UPDATE_CHECK=1`; utility commands such as `tau --version`,
 `tau update`, `tau sessions`, and `tau export` do not run it. After an upgrade,
@@ -38,6 +38,24 @@ features and fixes.
 | `tau --export <ref> [dest]` | Same as `tau export`, as a top-level flag |
 | `tau providers` | List configured providers and how each authenticates |
 | `tau [setup options] setup` | Create/update an OpenAI-compatible provider |
+| `tau incident new/observe/show/report/run/resume/pause/cancel/retry/budget ...` | Investigate live/replay telemetry with shared budgets, review, isolated analysis and versioned reports; Stages 1–6 implemented, pending unified verification |
+| `tau incident memory/recheck/reopen/withdraw-report/evidence-applicability/impact/revise-task ...` | Query/rebuild historical cards and submit explicit quality controls; all behavior awaits unified verification |
+
+Incident flags follow the incident action, including the required `--environment`
+and optional `--project`. See [Incident investigation]({{< relref "../guides/incidents.md" >}})
+for the complete interface, JSON provenance input, cursor queries and retry semantics.
+`incident run` and `incident resume` call a model and require exactly one of
+`--fixture PATH` or `--services-config PATH`. Provider/model
+selection can be supplied before `incident` using Tau's global flags. It runs
+independent workers (default concurrency 2) and returns versioned progress or a diagnosis.
+`--checkpoint-steps N` optionally pauses after N model requests in each run/resume;
+`--token-limit N` sets an optional case allowance; new cases default to no token cap.
+Incident roles have no turn or total duration limit. Legacy cases are read-only;
+new cases use the project's `v2/` incident directory.
+Use `resume` for paused cases; `pause/cancel/retry/budget` retain the same Case and
+stable command receipts. Standalone writes return ownership conflicts while another
+coordinator is live. `show --view owner/manifest/budget` exposes control state. Manual commands stay
+model-free, and incident commands do not start the coding TUI.
 
 ## Options
 
@@ -163,3 +181,15 @@ tau --provider local \
 
 See also: [RPC protocol]({{< relref "./rpc.md" >}}), [Slash commands]({{< relref "./slash-commands.md" >}}) (in-session), and
 [Keyboard shortcuts]({{< relref "./keybindings.md" >}}).
+
+### Incident service and workspace (Stage 6)
+
+Implemented, pending unified verification. New positional incident actions:
+`serve`, `connect`, `dispatch`, `query`, `import-alert`, `inbox`, `associate`,
+`timeline`, `handoff`. They require `--config HOST.json`; `--project` defaults to cwd.
+Use `--remote` for service operations, `--json-file` for actions/queries/imports,
+`--case-id`, `--update-id`, `--after`, and `--output` for structured handoff export.
+A local service descriptor selects its transport automatically. `serve` stays in
+the foreground; `connect` returns service capabilities. See the incident guide for
+Session binding and `/incident` workspace commands. Original incident commands and
+coding prompt parsing remain available.

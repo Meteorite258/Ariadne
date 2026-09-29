@@ -55,6 +55,7 @@ launching `tau`.
 ├── trust.json          # versioned project-input trust decisions
 ├── tui.json            # TUI theme, keybindings, and layout
 ├── sessions/           # saved sessions, per project
+├── incidents/          # incident databases, request records and artifacts, per project
 ├── skills/             # user-level skills
 ├── prompts/            # user-level prompt templates
 ├── themes/             # user-level TUI themes
@@ -66,6 +67,31 @@ launching `tau`.
 
 Tau also reads user-level `.agents` resources: `~/.agents/skills/`,
 `~/.agents/prompts/`, `~/.agents/AGENTS.md`.
+
+New incident data uses `incidents/<project_key>/v2/cases.sqlite3` and
+`incidents/<project_key>/v2/artifacts/<sha256>`. The project key combines a directory
+slug and a hash of its canonical absolute path; the environment is stored in each
+case and checked by the incident host. These records are independent of coding
+sessions. Stages 1–6 are implemented, pending unified verification. `incident run/resume`
+uses configured providers, live or replay telemetry, request limits and tools.
+It does not load CodingSession resources or compaction. SQLite schema version 6
+retains leases, role/attempt slots, responses and authoritative request selections, and
+rebuilds case projections with review cycles, report/card versions and derived
+invalidation. It also stores the run queue, alert inbox, normalized updates and external
+incident mappings. `--max-repair-rounds` defaults to 2; quality roles share the request
+ledger and concurrency limits. Normal provider settings are not rewritten by a run.
+Default Case concurrency is 2; `--global-concurrency` defaults to 8 across active
+cases in the project's database, using the strictest live setting. `token_limit` defaults
+to `null`; an explicit case cap persists across runs. Optional `checkpoint_steps` pauses
+after that many model requests in one run or resume, draining sent requests first.
+`incident budget --token-limit N`, `--add-tokens N`, and `--clear-token-limit` change
+the cap without clearing usage. Task budgets, `max_tasks`, `max_turns`,
+`role_timeout_seconds`, `call_limit` and reporting reserves are removed. Old JSON
+settings using these fields fail with replacement advice. Old databases stay at their
+original location and are opened through a read-only archive adapter; they cannot
+resume or accept policy changes. Providers are created separately for each worker. See
+[Incident investigation]({{< relref "../guides/incidents.md" >}}) for storage and
+verification limits.
 
 `settings.json` may contain `"defaultProjectTrust": "ask" | "always" |
 "never"`. It is user-global only; a project cannot choose its own trust
@@ -490,6 +516,58 @@ Resource discovery order (later overrides earlier) is documented in
 
 ## Context
 
+### Incident external services
+
+`incident run/resume --services-config FILE` reads explicit application configuration;
+it is not inherited by ordinary coding sessions. Schema version 1 supports:
+
+| Field | Meaning |
+| --- | --- |
+| `mode` | `live` or `fixture` |
+| `fixture` | Replay JSON or dataset directory, relative to this config |
+| `live` | Environment, business service allowlist, Prometheus/Jaeger/OpenSearch endpoints and field mappings |
+| `history` | Versioned public environment history JSON; required for live mode |
+| `analysis_image` | Immutable image digest, or null to disable Python analysis |
+| `analysis_limits` | CPU, memory, process, input/output and time bounds controlled by the application |
+| `otel` | OTLP/HTTP trace endpoint, separate Agent service/environment, queue/retry/flush bounds |
+
+Each endpoint supports `url`, `token_env`, `timeout_seconds` and `max_bytes`.
+Credentials must be supplied through the named environment variable. HTTP clients
+do not follow redirects or inherit proxy credentials. Queries cannot override endpoints,
+business scope, arbitrary PromQL/DSL or container policy. See the pinned
+`examples/incident-demo/live.json` and its deployment README. Stage 5 configuration
+and code are implemented, pending unified verification; runtime deployment values
+and the analysis image digest still need to be supplied before use.
+
+### Coding context
+
 `/session` reports a rough context estimate and breakdown. Auto-compaction
 triggers near the model's context window minus a reserve; override per run with
 `--auto-compact-threshold`. Details in [Managing context]({{< relref "../guides/context.md" >}}).
+
+## Incident Host settings (Stage 6)
+
+Implemented, pending unified verification. `examples/incident-demo/host.json` is
+validated by `tau_coding.incident.settings.HostSettings`. Paths for fixture or
+services_config resolve relative to that file. Select at most one data source.
+
+| Field | Meaning |
+| --- | --- |
+| environment, alert_source | Authorized environment and normalized alert source |
+| bind, port, endpoint | Listen address and reconnect URL; default loopback:8765 |
+| allow_remote | Explicit opt-in for non-loopback binding/connection |
+| token_env, webhook_token_env | Names of operation/webhook Bearer secrets; at least 24 characters |
+| max_body_bytes, max_pending_alerts | HTTP payload and durable intake backpressure |
+| fixture, services_config, provider, model | Isolated investigation resources |
+| jaeger_url | Optional execution trace link base, without credentials/query/fragment |
+| auto_start.environments/services/severities | All three allowlists must match; empty by default |
+| auto_start.max_running_cases/max_queued_cases | Atomic case dispatch and queue limits |
+| auto_start.correlation_seconds | Scope/entity association window, default 900 seconds |
+| auto_start.limits | RunLimits, including cumulative token budget, optional per-run `checkpoint_steps` and global worker concurrency |
+
+Set `AMADEUS_INCIDENT_CONFIG` for TUI/RPC integration; mode defaults to `connect`.
+`embedded` owns and cleans up its runtimes. Schema v5 migrates the Case database
+with inbox, alert updates, external mappings and durable run requests. Service
+credentials remain in the process environment. `incident-service.json` contains
+settings/variable names only. Deploy behind an appropriately configured transport
+when using an explicit remote address. No deployment occurred in Stage 6.

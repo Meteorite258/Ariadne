@@ -1,0 +1,2105 @@
+{
+  "schema_version": 1,
+  "catalog": [
+    {
+      "version": "5f79f98d249c5c7e33824f05f079b3e0af0073b6cc3025fae7fd31e61fc399ee",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "accounting",
+          "ad",
+          "cart",
+          "checkout",
+          "currency",
+          "email",
+          "fraud-detection",
+          "frontend",
+          "frontend-proxy",
+          "image-provider",
+          "load-generator",
+          "payment",
+          "product-catalog",
+          "quote",
+          "recommendation",
+          "shipping",
+          "kafka"
+        ],
+        "time_window": {
+          "start": null,
+          "end": null
+        }
+      },
+      "available_at": "2026-09-27T08:09:54.002096Z",
+      "entities": [
+        "accounting",
+        "ad",
+        "cart",
+        "checkout",
+        "currency",
+        "email",
+        "fraud-detection",
+        "frontend",
+        "frontend-proxy",
+        "image-provider",
+        "load-generator",
+        "payment",
+        "product-catalog",
+        "quote",
+        "recommendation",
+        "shipping",
+        "kafka"
+      ],
+      "edges": [
+        [
+          "accounting",
+          "kafka"
+        ],
+        [
+          "checkout",
+          "cart"
+        ],
+        [
+          "checkout",
+          "currency"
+        ],
+        [
+          "checkout",
+          "email"
+        ],
+        [
+          "checkout",
+          "kafka"
+        ],
+        [
+          "checkout",
+          "payment"
+        ],
+        [
+          "checkout",
+          "product-catalog"
+        ],
+        [
+          "checkout",
+          "shipping"
+        ],
+        [
+          "fraud-detection",
+          "kafka"
+        ],
+        [
+          "frontend",
+          "ad"
+        ],
+        [
+          "frontend",
+          "cart"
+        ],
+        [
+          "frontend",
+          "checkout"
+        ],
+        [
+          "frontend",
+          "currency"
+        ],
+        [
+          "frontend",
+          "frontend"
+        ],
+        [
+          "frontend",
+          "product-catalog"
+        ],
+        [
+          "frontend",
+          "recommendation"
+        ],
+        [
+          "frontend",
+          "shipping"
+        ],
+        [
+          "recommendation",
+          "product-catalog"
+        ],
+        [
+          "shipping",
+          "quote"
+        ]
+      ],
+      "configuration": {
+        "accounting": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:5dd4d4655a1c2bb8868e691c8c37dbedc0ffd7461c36a99417dd89b4b7a2d140",
+          "endpoints": {
+            "KAFKA_ADDR": "kafka:9092"
+          }
+        },
+        "ad": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:7f6c3fda7fed57ea4dbca92d801d8a3c01909a848b33170f16494da89e90343c",
+          "endpoints": {}
+        },
+        "cart": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:2ec7601655cbe5d295d0e5bd85f5b8acaf3b0f2651f8ea33ba1150edbf6000bf",
+          "endpoints": {
+            "VALKEY_ADDR": "valkey-cart:6379"
+          }
+        },
+        "checkout": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+          "endpoints": {
+            "CART_ADDR": "cart:7070",
+            "CURRENCY_ADDR": "currency:7001",
+            "EMAIL_ADDR": "http://email:6060",
+            "KAFKA_ADDR": "kafka:9092",
+            "PAYMENT_ADDR": "payment:50051",
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550",
+            "SHIPPING_ADDR": "shipping:50050"
+          }
+        },
+        "currency": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:03fb9bf6d8072cacabdf018396f6d48082ad5f824443965573a064c7faecd944",
+          "endpoints": {}
+        },
+        "email": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:270c487983d8aaf111df31eb1075ddc366d9eafec1e4c937899d05be9a6dd4b3",
+          "endpoints": {}
+        },
+        "fraud-detection": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:8b0a841c19f583a83b150bbd0609d85b3f09d19a75888d716bb234098f3385b4",
+          "endpoints": {
+            "KAFKA_ADDR": "kafka:9092"
+          }
+        },
+        "frontend": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:3a0c7649f63d59656f6ba76fcd7ec79c1974cc3db0ae624efdf38fbdc8a14d4c",
+          "endpoints": {
+            "AD_ADDR": "ad:9555",
+            "CART_ADDR": "cart:7070",
+            "CHECKOUT_ADDR": "checkout:5050",
+            "CURRENCY_ADDR": "currency:7001",
+            "FRONTEND_ADDR": "frontend:8080",
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550",
+            "RECOMMENDATION_ADDR": "recommendation:9001",
+            "SHIPPING_ADDR": "shipping:50050"
+          }
+        },
+        "frontend-proxy": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:9cc478aa226b33cd80af46971683bfa963283a4309adf36d39706a406641ac7e",
+          "endpoints": {}
+        },
+        "image-provider": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:bfa0b940f79df27c564778bc70eaf506c7234fcef328d8139e30d0f592e8fbfc",
+          "endpoints": {}
+        },
+        "load-generator": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:d257288d374e1f6ebceb9997049fd4a31437037e85fc6dccaedd0c4810e1ca11",
+          "endpoints": {}
+        },
+        "payment": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:33f327b357617379bfa3b292f430d1f06e66e2872494125a40bae14d8fe57d87",
+          "endpoints": {}
+        },
+        "product-catalog": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:050a0fc2026b75cc8716cbd5daf9c9e5fd552808a59928a6bfca18bfb8edd2d5",
+          "endpoints": {}
+        },
+        "quote": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:38f9d9abe0808c154011f3286754c848977bb9816923bdddd6dd39043c1e2139",
+          "endpoints": {}
+        },
+        "recommendation": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:2ca9d61f520e94c7d28fd77d9715483513773a248bf10e8612885868b2c147e5",
+          "endpoints": {
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550"
+          }
+        },
+        "shipping": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:e29cb4277ebd2f0532eb43ae704038cbc47f220205fdb389ac8292a6356d1a0a",
+          "endpoints": {
+            "QUOTE_ADDR": "http://quote:8090"
+          }
+        },
+        "kafka": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:0f1270d986ffd18ce73ca56e6c9b94077929fb31ae2be101036663213da0a4a1",
+          "endpoints": {}
+        }
+      },
+      "origin": "declared",
+      "data_at": "2026-09-27T08:09:54.002138Z"
+    },
+    {
+      "version": "69d7f1ac8fa364d40c84999844cfab31d497032ecbbec8f05efb5b29a3678e0a",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment"
+        ],
+        "time_window": {
+          "start": "2026-09-27T08:11:34.657669Z",
+          "end": "2026-09-27T08:14:34.657669Z"
+        }
+      },
+      "available_at": "2026-09-27T08:14:43.250438Z",
+      "entities": [
+        "checkout",
+        "payment"
+      ],
+      "edges": [
+        [
+          "checkout",
+          "payment"
+        ]
+      ],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:12:59.710462Z"
+    },
+    {
+      "version": "e99dc76cd7210bea05bdd7290201c85aaaab561b442a5d1114c935d7832c1a50",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T16:11:34.657669+08:00",
+          "end": "2026-09-27T16:14:34.657669+08:00"
+        }
+      },
+      "available_at": "2026-09-27T08:17:46.111478Z",
+      "entities": [
+        "cart",
+        "checkout",
+        "payment"
+      ],
+      "edges": [
+        [
+          "checkout",
+          "cart"
+        ],
+        [
+          "checkout",
+          "payment"
+        ]
+      ],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:12:05.812477Z"
+    },
+    {
+      "version": "a00bd341ccf85bf74711d85f27a9d68cf45b221a1a29c1d333c27c00c7e6bb96",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T16:11:34.657669+08:00",
+          "end": "2026-09-27T16:14:34.657669+08:00"
+        }
+      },
+      "available_at": "2026-09-27T08:17:47.438475Z",
+      "entities": [
+        "cart",
+        "checkout",
+        "payment"
+      ],
+      "edges": [
+        [
+          "checkout",
+          "cart"
+        ],
+        [
+          "checkout",
+          "payment"
+        ]
+      ],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:12:35.476465Z"
+    },
+    {
+      "version": "723c0782b6328659adc2df43af5426aedb9b68f58aeea3aa45f7b409b3e5fccd",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T16:11:34.657669+08:00",
+          "end": "2026-09-27T16:14:34.657669+08:00"
+        }
+      },
+      "available_at": "2026-09-27T08:17:48.778629Z",
+      "entities": [
+        "cart",
+        "checkout",
+        "payment"
+      ],
+      "edges": [
+        [
+          "checkout",
+          "cart"
+        ],
+        [
+          "checkout",
+          "payment"
+        ]
+      ],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:12:58.265253Z"
+    },
+    {
+      "version": "95d55e0d9e8713c1f9ec147e2254f8e08e093d3d4f8c336e8f386e215ef0fee6",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T16:11:34.657669+08:00",
+          "end": "2026-09-27T16:14:34.657669+08:00"
+        }
+      },
+      "available_at": "2026-09-27T08:17:50.225019Z",
+      "entities": [
+        "cart",
+        "checkout",
+        "payment"
+      ],
+      "edges": [
+        [
+          "checkout",
+          "cart"
+        ],
+        [
+          "checkout",
+          "payment"
+        ]
+      ],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:13:28.591562Z"
+    },
+    {
+      "version": "e167c74e82dd712e7ab9667e12cfa05ea4afdc21728d8d9eaf2c55e57f49f95e",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T16:11:34.657669+08:00",
+          "end": "2026-09-27T16:14:34.657669+08:00"
+        }
+      },
+      "available_at": "2026-09-27T08:17:51.658543Z",
+      "entities": [
+        "cart"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:14:03.379519Z"
+    },
+    {
+      "version": "2ac080c8457e7d1e83b9562f39f53dc2db7718a0aaaaf616d36c186bd0a64b2f",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T16:11:34.657669+08:00",
+          "end": "2026-09-27T16:14:34.657669+08:00"
+        }
+      },
+      "available_at": "2026-09-27T08:17:53.150362Z",
+      "entities": [
+        "cart"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:14:33.879936Z"
+    },
+    {
+      "version": "46306c8373e34ed7d430f55d5b2df36c0c8d8032408ead828e25f2e8d10480ea",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T08:22:00Z",
+          "end": "2026-09-27T08:25:54.605135Z"
+        }
+      },
+      "available_at": "2026-09-27T08:29:37.064043Z",
+      "entities": [
+        "cart"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:22:34.010095Z"
+    },
+    {
+      "version": "91fb67efbe5c07021bb706eb1968a1ddedfa8661b88d86848e0f50cb9e827eed",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T08:22:00Z",
+          "end": "2026-09-27T08:25:54.605135Z"
+        }
+      },
+      "available_at": "2026-09-27T08:29:38.477960Z",
+      "entities": [
+        "cart"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:23:06.758401Z"
+    },
+    {
+      "version": "7f6d2e62590274bae7ce8efdccdc6cf56a63fb14b056dcc4e43dc67b509698ff",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T08:22:00Z",
+          "end": "2026-09-27T08:25:54.605135Z"
+        }
+      },
+      "available_at": "2026-09-27T08:29:40.136975Z",
+      "entities": [
+        "cart"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:23:42.706603Z"
+    },
+    {
+      "version": "1cf68db2a0576d85dd503eac0bfee894850c39a534dddcd87f1e333e0408efb4",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T08:22:00Z",
+          "end": "2026-09-27T08:25:54.605135Z"
+        }
+      },
+      "available_at": "2026-09-27T08:29:41.615514Z",
+      "entities": [
+        "cart"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:24:16.511927Z"
+    },
+    {
+      "version": "d3fac5741a5e6285c7209a37da64319625997198c0046ca76c813bbe307acace",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T08:22:00Z",
+          "end": "2026-09-27T08:25:54.605135Z"
+        }
+      },
+      "available_at": "2026-09-27T08:29:43.309928Z",
+      "entities": [
+        "cart"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:24:49.994781Z"
+    },
+    {
+      "version": "baa9bcd79a4f436a501cbdf40a4a6c2fa4bda5fa0987a5c166ae3f920f6c52b7",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T08:22:00Z",
+          "end": "2026-09-27T08:25:54.605135Z"
+        }
+      },
+      "available_at": "2026-09-27T08:29:44.931016Z",
+      "entities": [
+        "cart",
+        "checkout",
+        "payment"
+      ],
+      "edges": [
+        [
+          "checkout",
+          "cart"
+        ],
+        [
+          "checkout",
+          "payment"
+        ]
+      ],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:25:17.420382Z"
+    },
+    {
+      "version": "f0d81f4dbf49f8a922a61ef07f3d38778c9e80598f72e4d0fffdd56925fa953e",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T08:22:00Z",
+          "end": "2026-09-27T08:25:54.605135Z"
+        }
+      },
+      "available_at": "2026-09-27T08:29:46.635362Z",
+      "entities": [
+        "cart"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:25:52.421751Z"
+    },
+    {
+      "version": "0628ab00b7fef5a3b7eb512f991ed06904cf14396ebbb482887dbdccb41e00fe",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T08:22:00Z",
+          "end": "2026-09-27T08:25:54.605135Z"
+        }
+      },
+      "available_at": "2026-09-27T08:29:48.260718Z",
+      "entities": [
+        "cart"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:25:54.461406Z"
+    },
+    {
+      "version": "1903bf27ec1945b3def7b564ba037a5c78587fdb3804d14e074a61978eeeee4d",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "accounting",
+          "ad",
+          "cart",
+          "checkout",
+          "currency",
+          "email",
+          "fraud-detection",
+          "frontend",
+          "frontend-proxy",
+          "image-provider",
+          "load-generator",
+          "payment",
+          "product-catalog",
+          "quote",
+          "recommendation",
+          "shipping",
+          "kafka"
+        ],
+        "time_window": {
+          "start": null,
+          "end": null
+        }
+      },
+      "available_at": "2026-09-27T08:32:19.703512Z",
+      "entities": [
+        "accounting",
+        "ad",
+        "cart",
+        "checkout",
+        "currency",
+        "email",
+        "fraud-detection",
+        "frontend",
+        "frontend-proxy",
+        "image-provider",
+        "load-generator",
+        "payment",
+        "product-catalog",
+        "quote",
+        "recommendation",
+        "shipping",
+        "kafka"
+      ],
+      "edges": [
+        [
+          "accounting",
+          "kafka"
+        ],
+        [
+          "checkout",
+          "cart"
+        ],
+        [
+          "checkout",
+          "currency"
+        ],
+        [
+          "checkout",
+          "email"
+        ],
+        [
+          "checkout",
+          "kafka"
+        ],
+        [
+          "checkout",
+          "product-catalog"
+        ],
+        [
+          "checkout",
+          "shipping"
+        ],
+        [
+          "fraud-detection",
+          "kafka"
+        ],
+        [
+          "frontend",
+          "ad"
+        ],
+        [
+          "frontend",
+          "cart"
+        ],
+        [
+          "frontend",
+          "checkout"
+        ],
+        [
+          "frontend",
+          "currency"
+        ],
+        [
+          "frontend",
+          "frontend"
+        ],
+        [
+          "frontend",
+          "product-catalog"
+        ],
+        [
+          "frontend",
+          "recommendation"
+        ],
+        [
+          "frontend",
+          "shipping"
+        ],
+        [
+          "recommendation",
+          "product-catalog"
+        ],
+        [
+          "shipping",
+          "quote"
+        ]
+      ],
+      "configuration": {
+        "accounting": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:5dd4d4655a1c2bb8868e691c8c37dbedc0ffd7461c36a99417dd89b4b7a2d140",
+          "endpoints": {
+            "KAFKA_ADDR": "kafka:9092"
+          }
+        },
+        "ad": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:7f6c3fda7fed57ea4dbca92d801d8a3c01909a848b33170f16494da89e90343c",
+          "endpoints": {}
+        },
+        "cart": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:2ec7601655cbe5d295d0e5bd85f5b8acaf3b0f2651f8ea33ba1150edbf6000bf",
+          "endpoints": {
+            "VALKEY_ADDR": "valkey-cart:6379"
+          }
+        },
+        "checkout": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+          "endpoints": {
+            "CART_ADDR": "cart:7070",
+            "CURRENCY_ADDR": "currency:7001",
+            "EMAIL_ADDR": "http://email:6060",
+            "KAFKA_ADDR": "kafka:9092",
+            "PAYMENT_ADDR": "payment-old:50051",
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550",
+            "SHIPPING_ADDR": "shipping:50050"
+          }
+        },
+        "currency": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:03fb9bf6d8072cacabdf018396f6d48082ad5f824443965573a064c7faecd944",
+          "endpoints": {}
+        },
+        "email": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:270c487983d8aaf111df31eb1075ddc366d9eafec1e4c937899d05be9a6dd4b3",
+          "endpoints": {}
+        },
+        "fraud-detection": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:8b0a841c19f583a83b150bbd0609d85b3f09d19a75888d716bb234098f3385b4",
+          "endpoints": {
+            "KAFKA_ADDR": "kafka:9092"
+          }
+        },
+        "frontend": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:3a0c7649f63d59656f6ba76fcd7ec79c1974cc3db0ae624efdf38fbdc8a14d4c",
+          "endpoints": {
+            "AD_ADDR": "ad:9555",
+            "CART_ADDR": "cart:7070",
+            "CHECKOUT_ADDR": "checkout:5050",
+            "CURRENCY_ADDR": "currency:7001",
+            "FRONTEND_ADDR": "frontend:8080",
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550",
+            "RECOMMENDATION_ADDR": "recommendation:9001",
+            "SHIPPING_ADDR": "shipping:50050"
+          }
+        },
+        "frontend-proxy": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:9cc478aa226b33cd80af46971683bfa963283a4309adf36d39706a406641ac7e",
+          "endpoints": {}
+        },
+        "image-provider": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:bfa0b940f79df27c564778bc70eaf506c7234fcef328d8139e30d0f592e8fbfc",
+          "endpoints": {}
+        },
+        "load-generator": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:d257288d374e1f6ebceb9997049fd4a31437037e85fc6dccaedd0c4810e1ca11",
+          "endpoints": {}
+        },
+        "payment": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:33f327b357617379bfa3b292f430d1f06e66e2872494125a40bae14d8fe57d87",
+          "endpoints": {}
+        },
+        "product-catalog": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:050a0fc2026b75cc8716cbd5daf9c9e5fd552808a59928a6bfca18bfb8edd2d5",
+          "endpoints": {}
+        },
+        "quote": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:38f9d9abe0808c154011f3286754c848977bb9816923bdddd6dd39043c1e2139",
+          "endpoints": {}
+        },
+        "recommendation": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:2ca9d61f520e94c7d28fd77d9715483513773a248bf10e8612885868b2c147e5",
+          "endpoints": {
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550"
+          }
+        },
+        "shipping": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:e29cb4277ebd2f0532eb43ae704038cbc47f220205fdb389ac8292a6356d1a0a",
+          "endpoints": {
+            "QUOTE_ADDR": "http://quote:8090"
+          }
+        },
+        "kafka": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:0f1270d986ffd18ce73ca56e6c9b94077929fb31ae2be101036663213da0a4a1",
+          "endpoints": {}
+        }
+      },
+      "origin": "declared",
+      "data_at": "2026-09-27T08:32:19.703516Z"
+    },
+    {
+      "version": "3c0a389958a98f5343683eecc38d6d988cc0bc2e566dedc995fc1d9390d96278",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment"
+        ],
+        "time_window": {
+          "start": "2026-09-27T08:30:00Z",
+          "end": "2026-09-27T08:40:00Z"
+        }
+      },
+      "available_at": "2026-09-27T08:33:53.859879Z",
+      "entities": [
+        "checkout"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T08:33:36.856695Z"
+    },
+    {
+      "version": "5f79f98d249c5c7e33824f05f079b3e0af0073b6cc3025fae7fd31e61fc399ee",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "accounting",
+          "ad",
+          "cart",
+          "checkout",
+          "currency",
+          "email",
+          "fraud-detection",
+          "frontend",
+          "frontend-proxy",
+          "image-provider",
+          "load-generator",
+          "payment",
+          "product-catalog",
+          "quote",
+          "recommendation",
+          "shipping",
+          "kafka"
+        ],
+        "time_window": {
+          "start": null,
+          "end": null
+        }
+      },
+      "available_at": "2026-09-27T17:55:03.766948Z",
+      "entities": [
+        "accounting",
+        "ad",
+        "cart",
+        "checkout",
+        "currency",
+        "email",
+        "fraud-detection",
+        "frontend",
+        "frontend-proxy",
+        "image-provider",
+        "load-generator",
+        "payment",
+        "product-catalog",
+        "quote",
+        "recommendation",
+        "shipping",
+        "kafka"
+      ],
+      "edges": [
+        [
+          "accounting",
+          "kafka"
+        ],
+        [
+          "checkout",
+          "cart"
+        ],
+        [
+          "checkout",
+          "currency"
+        ],
+        [
+          "checkout",
+          "email"
+        ],
+        [
+          "checkout",
+          "kafka"
+        ],
+        [
+          "checkout",
+          "payment"
+        ],
+        [
+          "checkout",
+          "product-catalog"
+        ],
+        [
+          "checkout",
+          "shipping"
+        ],
+        [
+          "fraud-detection",
+          "kafka"
+        ],
+        [
+          "frontend",
+          "ad"
+        ],
+        [
+          "frontend",
+          "cart"
+        ],
+        [
+          "frontend",
+          "checkout"
+        ],
+        [
+          "frontend",
+          "currency"
+        ],
+        [
+          "frontend",
+          "frontend"
+        ],
+        [
+          "frontend",
+          "product-catalog"
+        ],
+        [
+          "frontend",
+          "recommendation"
+        ],
+        [
+          "frontend",
+          "shipping"
+        ],
+        [
+          "recommendation",
+          "product-catalog"
+        ],
+        [
+          "shipping",
+          "quote"
+        ]
+      ],
+      "configuration": {
+        "accounting": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:5dd4d4655a1c2bb8868e691c8c37dbedc0ffd7461c36a99417dd89b4b7a2d140",
+          "endpoints": {
+            "KAFKA_ADDR": "kafka:9092"
+          }
+        },
+        "ad": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:7f6c3fda7fed57ea4dbca92d801d8a3c01909a848b33170f16494da89e90343c",
+          "endpoints": {}
+        },
+        "cart": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:2ec7601655cbe5d295d0e5bd85f5b8acaf3b0f2651f8ea33ba1150edbf6000bf",
+          "endpoints": {
+            "VALKEY_ADDR": "valkey-cart:6379"
+          }
+        },
+        "checkout": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+          "endpoints": {
+            "CART_ADDR": "cart:7070",
+            "CURRENCY_ADDR": "currency:7001",
+            "EMAIL_ADDR": "http://email:6060",
+            "KAFKA_ADDR": "kafka:9092",
+            "PAYMENT_ADDR": "payment:50051",
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550",
+            "SHIPPING_ADDR": "shipping:50050"
+          }
+        },
+        "currency": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:03fb9bf6d8072cacabdf018396f6d48082ad5f824443965573a064c7faecd944",
+          "endpoints": {}
+        },
+        "email": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:270c487983d8aaf111df31eb1075ddc366d9eafec1e4c937899d05be9a6dd4b3",
+          "endpoints": {}
+        },
+        "fraud-detection": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:8b0a841c19f583a83b150bbd0609d85b3f09d19a75888d716bb234098f3385b4",
+          "endpoints": {
+            "KAFKA_ADDR": "kafka:9092"
+          }
+        },
+        "frontend": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:3a0c7649f63d59656f6ba76fcd7ec79c1974cc3db0ae624efdf38fbdc8a14d4c",
+          "endpoints": {
+            "AD_ADDR": "ad:9555",
+            "CART_ADDR": "cart:7070",
+            "CHECKOUT_ADDR": "checkout:5050",
+            "CURRENCY_ADDR": "currency:7001",
+            "FRONTEND_ADDR": "frontend:8080",
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550",
+            "RECOMMENDATION_ADDR": "recommendation:9001",
+            "SHIPPING_ADDR": "shipping:50050"
+          }
+        },
+        "frontend-proxy": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:9cc478aa226b33cd80af46971683bfa963283a4309adf36d39706a406641ac7e",
+          "endpoints": {}
+        },
+        "image-provider": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:bfa0b940f79df27c564778bc70eaf506c7234fcef328d8139e30d0f592e8fbfc",
+          "endpoints": {}
+        },
+        "load-generator": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:d257288d374e1f6ebceb9997049fd4a31437037e85fc6dccaedd0c4810e1ca11",
+          "endpoints": {}
+        },
+        "payment": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:33f327b357617379bfa3b292f430d1f06e66e2872494125a40bae14d8fe57d87",
+          "endpoints": {}
+        },
+        "product-catalog": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:050a0fc2026b75cc8716cbd5daf9c9e5fd552808a59928a6bfca18bfb8edd2d5",
+          "endpoints": {}
+        },
+        "quote": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:38f9d9abe0808c154011f3286754c848977bb9816923bdddd6dd39043c1e2139",
+          "endpoints": {}
+        },
+        "recommendation": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:2ca9d61f520e94c7d28fd77d9715483513773a248bf10e8612885868b2c147e5",
+          "endpoints": {
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550"
+          }
+        },
+        "shipping": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:e29cb4277ebd2f0532eb43ae704038cbc47f220205fdb389ac8292a6356d1a0a",
+          "endpoints": {
+            "QUOTE_ADDR": "http://quote:8090"
+          }
+        },
+        "kafka": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:0f1270d986ffd18ce73ca56e6c9b94077929fb31ae2be101036663213da0a4a1",
+          "endpoints": {}
+        }
+      },
+      "origin": "declared",
+      "data_at": "2026-09-27T17:55:03.767162Z"
+    },
+    {
+      "version": "5f79f98d249c5c7e33824f05f079b3e0af0073b6cc3025fae7fd31e61fc399ee",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "accounting",
+          "ad",
+          "cart",
+          "checkout",
+          "currency",
+          "email",
+          "fraud-detection",
+          "frontend",
+          "frontend-proxy",
+          "image-provider",
+          "load-generator",
+          "payment",
+          "product-catalog",
+          "quote",
+          "recommendation",
+          "shipping",
+          "kafka"
+        ],
+        "time_window": {
+          "start": null,
+          "end": null
+        }
+      },
+      "available_at": "2026-09-27T18:27:54.287123Z",
+      "entities": [
+        "accounting",
+        "ad",
+        "cart",
+        "checkout",
+        "currency",
+        "email",
+        "fraud-detection",
+        "frontend",
+        "frontend-proxy",
+        "image-provider",
+        "load-generator",
+        "payment",
+        "product-catalog",
+        "quote",
+        "recommendation",
+        "shipping",
+        "kafka"
+      ],
+      "edges": [
+        [
+          "accounting",
+          "kafka"
+        ],
+        [
+          "checkout",
+          "cart"
+        ],
+        [
+          "checkout",
+          "currency"
+        ],
+        [
+          "checkout",
+          "email"
+        ],
+        [
+          "checkout",
+          "kafka"
+        ],
+        [
+          "checkout",
+          "payment"
+        ],
+        [
+          "checkout",
+          "product-catalog"
+        ],
+        [
+          "checkout",
+          "shipping"
+        ],
+        [
+          "fraud-detection",
+          "kafka"
+        ],
+        [
+          "frontend",
+          "ad"
+        ],
+        [
+          "frontend",
+          "cart"
+        ],
+        [
+          "frontend",
+          "checkout"
+        ],
+        [
+          "frontend",
+          "currency"
+        ],
+        [
+          "frontend",
+          "frontend"
+        ],
+        [
+          "frontend",
+          "product-catalog"
+        ],
+        [
+          "frontend",
+          "recommendation"
+        ],
+        [
+          "frontend",
+          "shipping"
+        ],
+        [
+          "recommendation",
+          "product-catalog"
+        ],
+        [
+          "shipping",
+          "quote"
+        ]
+      ],
+      "configuration": {
+        "accounting": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:5dd4d4655a1c2bb8868e691c8c37dbedc0ffd7461c36a99417dd89b4b7a2d140",
+          "endpoints": {
+            "KAFKA_ADDR": "kafka:9092"
+          }
+        },
+        "ad": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:7f6c3fda7fed57ea4dbca92d801d8a3c01909a848b33170f16494da89e90343c",
+          "endpoints": {}
+        },
+        "cart": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:2ec7601655cbe5d295d0e5bd85f5b8acaf3b0f2651f8ea33ba1150edbf6000bf",
+          "endpoints": {
+            "VALKEY_ADDR": "valkey-cart:6379"
+          }
+        },
+        "checkout": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+          "endpoints": {
+            "CART_ADDR": "cart:7070",
+            "CURRENCY_ADDR": "currency:7001",
+            "EMAIL_ADDR": "http://email:6060",
+            "KAFKA_ADDR": "kafka:9092",
+            "PAYMENT_ADDR": "payment:50051",
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550",
+            "SHIPPING_ADDR": "shipping:50050"
+          }
+        },
+        "currency": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:03fb9bf6d8072cacabdf018396f6d48082ad5f824443965573a064c7faecd944",
+          "endpoints": {}
+        },
+        "email": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:270c487983d8aaf111df31eb1075ddc366d9eafec1e4c937899d05be9a6dd4b3",
+          "endpoints": {}
+        },
+        "fraud-detection": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:8b0a841c19f583a83b150bbd0609d85b3f09d19a75888d716bb234098f3385b4",
+          "endpoints": {
+            "KAFKA_ADDR": "kafka:9092"
+          }
+        },
+        "frontend": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:3a0c7649f63d59656f6ba76fcd7ec79c1974cc3db0ae624efdf38fbdc8a14d4c",
+          "endpoints": {
+            "AD_ADDR": "ad:9555",
+            "CART_ADDR": "cart:7070",
+            "CHECKOUT_ADDR": "checkout:5050",
+            "CURRENCY_ADDR": "currency:7001",
+            "FRONTEND_ADDR": "frontend:8080",
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550",
+            "RECOMMENDATION_ADDR": "recommendation:9001",
+            "SHIPPING_ADDR": "shipping:50050"
+          }
+        },
+        "frontend-proxy": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:9cc478aa226b33cd80af46971683bfa963283a4309adf36d39706a406641ac7e",
+          "endpoints": {}
+        },
+        "image-provider": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:bfa0b940f79df27c564778bc70eaf506c7234fcef328d8139e30d0f592e8fbfc",
+          "endpoints": {}
+        },
+        "load-generator": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:d257288d374e1f6ebceb9997049fd4a31437037e85fc6dccaedd0c4810e1ca11",
+          "endpoints": {}
+        },
+        "payment": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:33f327b357617379bfa3b292f430d1f06e66e2872494125a40bae14d8fe57d87",
+          "endpoints": {}
+        },
+        "product-catalog": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:050a0fc2026b75cc8716cbd5daf9c9e5fd552808a59928a6bfca18bfb8edd2d5",
+          "endpoints": {}
+        },
+        "quote": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:38f9d9abe0808c154011f3286754c848977bb9816923bdddd6dd39043c1e2139",
+          "endpoints": {}
+        },
+        "recommendation": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:2ca9d61f520e94c7d28fd77d9715483513773a248bf10e8612885868b2c147e5",
+          "endpoints": {
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550"
+          }
+        },
+        "shipping": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:e29cb4277ebd2f0532eb43ae704038cbc47f220205fdb389ac8292a6356d1a0a",
+          "endpoints": {
+            "QUOTE_ADDR": "http://quote:8090"
+          }
+        },
+        "kafka": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:0f1270d986ffd18ce73ca56e6c9b94077929fb31ae2be101036663213da0a4a1",
+          "endpoints": {}
+        }
+      },
+      "origin": "declared",
+      "data_at": "2026-09-27T18:27:54.287132Z"
+    },
+    {
+      "version": "5f79f98d249c5c7e33824f05f079b3e0af0073b6cc3025fae7fd31e61fc399ee",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "accounting",
+          "ad",
+          "cart",
+          "checkout",
+          "currency",
+          "email",
+          "fraud-detection",
+          "frontend",
+          "frontend-proxy",
+          "image-provider",
+          "load-generator",
+          "payment",
+          "product-catalog",
+          "quote",
+          "recommendation",
+          "shipping",
+          "kafka"
+        ],
+        "time_window": {
+          "start": null,
+          "end": null
+        }
+      },
+      "available_at": "2026-09-27T18:28:30.576571Z",
+      "entities": [
+        "accounting",
+        "ad",
+        "cart",
+        "checkout",
+        "currency",
+        "email",
+        "fraud-detection",
+        "frontend",
+        "frontend-proxy",
+        "image-provider",
+        "load-generator",
+        "payment",
+        "product-catalog",
+        "quote",
+        "recommendation",
+        "shipping",
+        "kafka"
+      ],
+      "edges": [
+        [
+          "accounting",
+          "kafka"
+        ],
+        [
+          "checkout",
+          "cart"
+        ],
+        [
+          "checkout",
+          "currency"
+        ],
+        [
+          "checkout",
+          "email"
+        ],
+        [
+          "checkout",
+          "kafka"
+        ],
+        [
+          "checkout",
+          "payment"
+        ],
+        [
+          "checkout",
+          "product-catalog"
+        ],
+        [
+          "checkout",
+          "shipping"
+        ],
+        [
+          "fraud-detection",
+          "kafka"
+        ],
+        [
+          "frontend",
+          "ad"
+        ],
+        [
+          "frontend",
+          "cart"
+        ],
+        [
+          "frontend",
+          "checkout"
+        ],
+        [
+          "frontend",
+          "currency"
+        ],
+        [
+          "frontend",
+          "frontend"
+        ],
+        [
+          "frontend",
+          "product-catalog"
+        ],
+        [
+          "frontend",
+          "recommendation"
+        ],
+        [
+          "frontend",
+          "shipping"
+        ],
+        [
+          "recommendation",
+          "product-catalog"
+        ],
+        [
+          "shipping",
+          "quote"
+        ]
+      ],
+      "configuration": {
+        "accounting": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:5dd4d4655a1c2bb8868e691c8c37dbedc0ffd7461c36a99417dd89b4b7a2d140",
+          "endpoints": {
+            "KAFKA_ADDR": "kafka:9092"
+          }
+        },
+        "ad": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:7f6c3fda7fed57ea4dbca92d801d8a3c01909a848b33170f16494da89e90343c",
+          "endpoints": {}
+        },
+        "cart": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:2ec7601655cbe5d295d0e5bd85f5b8acaf3b0f2651f8ea33ba1150edbf6000bf",
+          "endpoints": {
+            "VALKEY_ADDR": "valkey-cart:6379"
+          }
+        },
+        "checkout": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+          "endpoints": {
+            "CART_ADDR": "cart:7070",
+            "CURRENCY_ADDR": "currency:7001",
+            "EMAIL_ADDR": "http://email:6060",
+            "KAFKA_ADDR": "kafka:9092",
+            "PAYMENT_ADDR": "payment:50051",
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550",
+            "SHIPPING_ADDR": "shipping:50050"
+          }
+        },
+        "currency": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:03fb9bf6d8072cacabdf018396f6d48082ad5f824443965573a064c7faecd944",
+          "endpoints": {}
+        },
+        "email": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:270c487983d8aaf111df31eb1075ddc366d9eafec1e4c937899d05be9a6dd4b3",
+          "endpoints": {}
+        },
+        "fraud-detection": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:8b0a841c19f583a83b150bbd0609d85b3f09d19a75888d716bb234098f3385b4",
+          "endpoints": {
+            "KAFKA_ADDR": "kafka:9092"
+          }
+        },
+        "frontend": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:3a0c7649f63d59656f6ba76fcd7ec79c1974cc3db0ae624efdf38fbdc8a14d4c",
+          "endpoints": {
+            "AD_ADDR": "ad:9555",
+            "CART_ADDR": "cart:7070",
+            "CHECKOUT_ADDR": "checkout:5050",
+            "CURRENCY_ADDR": "currency:7001",
+            "FRONTEND_ADDR": "frontend:8080",
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550",
+            "RECOMMENDATION_ADDR": "recommendation:9001",
+            "SHIPPING_ADDR": "shipping:50050"
+          }
+        },
+        "frontend-proxy": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:9cc478aa226b33cd80af46971683bfa963283a4309adf36d39706a406641ac7e",
+          "endpoints": {}
+        },
+        "image-provider": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:bfa0b940f79df27c564778bc70eaf506c7234fcef328d8139e30d0f592e8fbfc",
+          "endpoints": {}
+        },
+        "load-generator": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:d257288d374e1f6ebceb9997049fd4a31437037e85fc6dccaedd0c4810e1ca11",
+          "endpoints": {}
+        },
+        "payment": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:33f327b357617379bfa3b292f430d1f06e66e2872494125a40bae14d8fe57d87",
+          "endpoints": {}
+        },
+        "product-catalog": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:050a0fc2026b75cc8716cbd5daf9c9e5fd552808a59928a6bfca18bfb8edd2d5",
+          "endpoints": {}
+        },
+        "quote": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:38f9d9abe0808c154011f3286754c848977bb9816923bdddd6dd39043c1e2139",
+          "endpoints": {}
+        },
+        "recommendation": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:2ca9d61f520e94c7d28fd77d9715483513773a248bf10e8612885868b2c147e5",
+          "endpoints": {
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550"
+          }
+        },
+        "shipping": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:e29cb4277ebd2f0532eb43ae704038cbc47f220205fdb389ac8292a6356d1a0a",
+          "endpoints": {
+            "QUOTE_ADDR": "http://quote:8090"
+          }
+        },
+        "kafka": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:0f1270d986ffd18ce73ca56e6c9b94077929fb31ae2be101036663213da0a4a1",
+          "endpoints": {}
+        }
+      },
+      "origin": "declared",
+      "data_at": "2026-09-27T18:28:30.576574Z"
+    },
+    {
+      "version": "1903bf27ec1945b3def7b564ba037a5c78587fdb3804d14e074a61978eeeee4d",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "accounting",
+          "ad",
+          "cart",
+          "checkout",
+          "currency",
+          "email",
+          "fraud-detection",
+          "frontend",
+          "frontend-proxy",
+          "image-provider",
+          "load-generator",
+          "payment",
+          "product-catalog",
+          "quote",
+          "recommendation",
+          "shipping",
+          "kafka"
+        ],
+        "time_window": {
+          "start": null,
+          "end": null
+        }
+      },
+      "available_at": "2026-09-27T18:30:27.551970Z",
+      "entities": [
+        "accounting",
+        "ad",
+        "cart",
+        "checkout",
+        "currency",
+        "email",
+        "fraud-detection",
+        "frontend",
+        "frontend-proxy",
+        "image-provider",
+        "load-generator",
+        "payment",
+        "product-catalog",
+        "quote",
+        "recommendation",
+        "shipping",
+        "kafka"
+      ],
+      "edges": [
+        [
+          "accounting",
+          "kafka"
+        ],
+        [
+          "checkout",
+          "cart"
+        ],
+        [
+          "checkout",
+          "currency"
+        ],
+        [
+          "checkout",
+          "email"
+        ],
+        [
+          "checkout",
+          "kafka"
+        ],
+        [
+          "checkout",
+          "product-catalog"
+        ],
+        [
+          "checkout",
+          "shipping"
+        ],
+        [
+          "fraud-detection",
+          "kafka"
+        ],
+        [
+          "frontend",
+          "ad"
+        ],
+        [
+          "frontend",
+          "cart"
+        ],
+        [
+          "frontend",
+          "checkout"
+        ],
+        [
+          "frontend",
+          "currency"
+        ],
+        [
+          "frontend",
+          "frontend"
+        ],
+        [
+          "frontend",
+          "product-catalog"
+        ],
+        [
+          "frontend",
+          "recommendation"
+        ],
+        [
+          "frontend",
+          "shipping"
+        ],
+        [
+          "recommendation",
+          "product-catalog"
+        ],
+        [
+          "shipping",
+          "quote"
+        ]
+      ],
+      "configuration": {
+        "accounting": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:5dd4d4655a1c2bb8868e691c8c37dbedc0ffd7461c36a99417dd89b4b7a2d140",
+          "endpoints": {
+            "KAFKA_ADDR": "kafka:9092"
+          }
+        },
+        "ad": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:7f6c3fda7fed57ea4dbca92d801d8a3c01909a848b33170f16494da89e90343c",
+          "endpoints": {}
+        },
+        "cart": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:2ec7601655cbe5d295d0e5bd85f5b8acaf3b0f2651f8ea33ba1150edbf6000bf",
+          "endpoints": {
+            "VALKEY_ADDR": "valkey-cart:6379"
+          }
+        },
+        "checkout": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+          "endpoints": {
+            "CART_ADDR": "cart:7070",
+            "CURRENCY_ADDR": "currency:7001",
+            "EMAIL_ADDR": "http://email:6060",
+            "KAFKA_ADDR": "kafka:9092",
+            "PAYMENT_ADDR": "payment-old:50051",
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550",
+            "SHIPPING_ADDR": "shipping:50050"
+          }
+        },
+        "currency": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:03fb9bf6d8072cacabdf018396f6d48082ad5f824443965573a064c7faecd944",
+          "endpoints": {}
+        },
+        "email": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:270c487983d8aaf111df31eb1075ddc366d9eafec1e4c937899d05be9a6dd4b3",
+          "endpoints": {}
+        },
+        "fraud-detection": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:8b0a841c19f583a83b150bbd0609d85b3f09d19a75888d716bb234098f3385b4",
+          "endpoints": {
+            "KAFKA_ADDR": "kafka:9092"
+          }
+        },
+        "frontend": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:3a0c7649f63d59656f6ba76fcd7ec79c1974cc3db0ae624efdf38fbdc8a14d4c",
+          "endpoints": {
+            "AD_ADDR": "ad:9555",
+            "CART_ADDR": "cart:7070",
+            "CHECKOUT_ADDR": "checkout:5050",
+            "CURRENCY_ADDR": "currency:7001",
+            "FRONTEND_ADDR": "frontend:8080",
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550",
+            "RECOMMENDATION_ADDR": "recommendation:9001",
+            "SHIPPING_ADDR": "shipping:50050"
+          }
+        },
+        "frontend-proxy": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:9cc478aa226b33cd80af46971683bfa963283a4309adf36d39706a406641ac7e",
+          "endpoints": {}
+        },
+        "image-provider": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:bfa0b940f79df27c564778bc70eaf506c7234fcef328d8139e30d0f592e8fbfc",
+          "endpoints": {}
+        },
+        "load-generator": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:d257288d374e1f6ebceb9997049fd4a31437037e85fc6dccaedd0c4810e1ca11",
+          "endpoints": {}
+        },
+        "payment": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:33f327b357617379bfa3b292f430d1f06e66e2872494125a40bae14d8fe57d87",
+          "endpoints": {}
+        },
+        "product-catalog": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:050a0fc2026b75cc8716cbd5daf9c9e5fd552808a59928a6bfca18bfb8edd2d5",
+          "endpoints": {}
+        },
+        "quote": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:38f9d9abe0808c154011f3286754c848977bb9816923bdddd6dd39043c1e2139",
+          "endpoints": {}
+        },
+        "recommendation": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:2ca9d61f520e94c7d28fd77d9715483513773a248bf10e8612885868b2c147e5",
+          "endpoints": {
+            "PRODUCT_CATALOG_ADDR": "product-catalog:3550"
+          }
+        },
+        "shipping": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:e29cb4277ebd2f0532eb43ae704038cbc47f220205fdb389ac8292a6356d1a0a",
+          "endpoints": {
+            "QUOTE_ADDR": "http://quote:8090"
+          }
+        },
+        "kafka": {
+          "image": "ghcr.io/open-telemetry/demo@sha256:0f1270d986ffd18ce73ca56e6c9b94077929fb31ae2be101036663213da0a4a1",
+          "endpoints": {}
+        }
+      },
+      "origin": "declared",
+      "data_at": "2026-09-27T18:30:27.551974Z"
+    },
+    {
+      "version": "f41c0ceb9f6d0dc84ddfb7b4151fe181fb0acdb24595b5d269841eabc3083dc1",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment"
+        ],
+        "time_window": {
+          "start": "2026-09-27T18:28:00Z",
+          "end": "2026-09-27T18:31:30Z"
+        }
+      },
+      "available_at": "2026-09-27T18:31:58.728136Z",
+      "entities": [
+        "checkout"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T18:31:12.021761Z"
+    },
+    {
+      "version": "a5adf3bc0a16aa27225df6b1ec7dc2700acbf284c666abe59c0c074f184e575f",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T18:29:30Z",
+          "end": "2026-09-27T18:31:00Z"
+        }
+      },
+      "available_at": "2026-09-27T18:32:58.996404Z",
+      "entities": [
+        "cart"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T18:30:00.081892Z"
+    },
+    {
+      "version": "82d7449d0938b92984e2852392441fc443f6d039261e401143935279fd56a6e0",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T18:29:30Z",
+          "end": "2026-09-27T18:31:00Z"
+        }
+      },
+      "available_at": "2026-09-27T18:32:59.634186Z",
+      "entities": [
+        "cart",
+        "checkout"
+      ],
+      "edges": [
+        [
+          "checkout",
+          "cart"
+        ]
+      ],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T18:30:31.048949Z"
+    },
+    {
+      "version": "764780272101a5c58a86ab62d517cd3b411017085e63439ce5956f49b105b2d8",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T18:29:30Z",
+          "end": "2026-09-27T18:31:00Z"
+        }
+      },
+      "available_at": "2026-09-27T18:33:00.273470Z",
+      "entities": [
+        "cart",
+        "checkout"
+      ],
+      "edges": [
+        [
+          "checkout",
+          "cart"
+        ]
+      ],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T18:30:59.596650Z"
+    },
+    {
+      "version": "08cf33ee8ebd3fd4272d6b73472212fa91776afb650212450260160f6f5ac171",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T18:29:30Z",
+          "end": "2026-09-27T18:31:00Z"
+        }
+      },
+      "available_at": "2026-09-27T18:35:06.212022Z",
+      "entities": [
+        "cart"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T18:30:00.081892Z"
+    },
+    {
+      "version": "86d59c9d85ef91de2d213f4b7a554747d11b376cacef60f823d3dd7653270111",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T18:29:30Z",
+          "end": "2026-09-27T18:31:00Z"
+        }
+      },
+      "available_at": "2026-09-27T18:35:07.010370Z",
+      "entities": [
+        "cart",
+        "checkout"
+      ],
+      "edges": [
+        [
+          "checkout",
+          "cart"
+        ]
+      ],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T18:30:31.048949Z"
+    },
+    {
+      "version": "3aaadf9b4751f95ceec684ca503f7f62b0f06517400e7707f398e52619149d70",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment",
+          "cart"
+        ],
+        "time_window": {
+          "start": "2026-09-27T18:29:30Z",
+          "end": "2026-09-27T18:31:00Z"
+        }
+      },
+      "available_at": "2026-09-27T18:35:07.679567Z",
+      "entities": [
+        "cart",
+        "checkout"
+      ],
+      "edges": [
+        [
+          "checkout",
+          "cart"
+        ]
+      ],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T18:30:59.596650Z"
+    },
+    {
+      "version": "4576617af9810950d6778b64bf16ff91578169dc93aff8f37632679fc488b84d",
+      "scope": {
+        "environment": "amadeus-demo",
+        "entities": [
+          "checkout",
+          "payment"
+        ],
+        "time_window": {
+          "start": "2026-09-27T18:29:30Z",
+          "end": "2026-09-27T18:31:00Z"
+        }
+      },
+      "available_at": "2026-09-27T18:37:05.451715Z",
+      "entities": [
+        "checkout"
+      ],
+      "edges": [],
+      "configuration": {
+        "coverage": "sampled/unknown; edges are observations, not causality"
+      },
+      "origin": "observed",
+      "data_at": "2026-09-27T18:30:52.660897Z"
+    }
+  ],
+  "changes": [
+    {
+      "change_id": "ec29829afe0e4d818292dc2fa3400a83",
+      "kind": "deployment",
+      "environment": "amadeus-demo",
+      "entity": "checkout",
+      "data_at": "2026-09-27T08:32:19.602029Z",
+      "available_at": "2026-09-27T08:32:19.602031Z",
+      "before_revision": "5e1f1a0f442eddcd82665cea31038786d26675553deffd31669b9b12f64ab44d",
+      "after_revision": "dc42ebc3590b49a4c2e01fda3aac3fe1b78ffe59dfa365120d76c0927ae8b6b8",
+      "before": {
+        "container_id": "900b57e865c3046dda86fc45494d5fbe2876b3912bd68cf7467f674300554b40",
+        "image": "sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+        "PAYMENT_ADDR": "payment:50051",
+        "running": true
+      },
+      "after": {
+        "container_id": "f0890acf39f60168305dc09079e72cdb0bb7c3f424d77fb0ef9265615dcb9afc",
+        "image": "sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+        "PAYMENT_ADDR": "payment-old:50051",
+        "running": true
+      },
+      "applied_receipt": "sha256:1ec0add6c9ac28e9307226d62e18816cc27220359701dd5d5159adb5126cc850"
+    },
+    {
+      "change_id": "8a586f4ece33400b9660e0977341018d",
+      "kind": "deployment",
+      "environment": "amadeus-demo",
+      "entity": "checkout",
+      "data_at": "2026-09-27T18:28:30.483469Z",
+      "available_at": "2026-09-27T18:28:30.483471Z",
+      "before_revision": "cf02c28853b2b07574342dafe9d329a2169c6c9e1823473334a1e4fe0fdf866a",
+      "after_revision": "bab0e8eac97eef79b382a170fb3e81db96209f987c91dccca5ca404e621cacfc",
+      "before": {
+        "container_id": "f52e7f8f86ae5f1d538ac68d26ec70e3a084c3e2f3f6b382f557fcd30e29c723",
+        "image": "sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+        "PAYMENT_ADDR": "payment:50051",
+        "running": true
+      },
+      "after": {
+        "container_id": "1a90c3ac72814252192ade6a17d0a4acff417127def5edf0a3d50f21f1bca3b8",
+        "image": "sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+        "PAYMENT_ADDR": "payment:50051",
+        "running": true
+      },
+      "applied_receipt": "sha256:60980cfae66668a1e1ce90790da4ce53763c888faef30999267a211dcc57015b"
+    },
+    {
+      "change_id": "71585a090bfe4161ab3fc0e6e61ab323",
+      "kind": "deployment",
+      "environment": "amadeus-demo",
+      "entity": "checkout",
+      "data_at": "2026-09-27T18:30:27.448674Z",
+      "available_at": "2026-09-27T18:30:27.448677Z",
+      "before_revision": "bab0e8eac97eef79b382a170fb3e81db96209f987c91dccca5ca404e621cacfc",
+      "after_revision": "b35188ac44bec51006211d7f4139f0afc6b62027bc57f31941565276d79c5e0e",
+      "before": {
+        "container_id": "1a90c3ac72814252192ade6a17d0a4acff417127def5edf0a3d50f21f1bca3b8",
+        "image": "sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+        "PAYMENT_ADDR": "payment:50051",
+        "running": true
+      },
+      "after": {
+        "container_id": "746268bb47aa5a4027098eb0fbbd16a5523f1e8144bb59e685ac290a5fdde335",
+        "image": "sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+        "PAYMENT_ADDR": "payment-old:50051",
+        "running": true
+      },
+      "applied_receipt": "sha256:8392073ef6b1b0d3fbc39be2142c6654b68b4c7320ee6edaecc74703d21a04b2"
+    }
+  ]
+}

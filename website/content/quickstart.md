@@ -1,45 +1,35 @@
 ---
 title: Quickstart
-description: Install Tau, connect a model, and run your first coding session.
+description: Install Amadeus, connect a model, and run your first coding session.
 type: doc
 ---
 
-This page takes you from nothing to your first Tau session. It should take a few
-minutes.
+This page takes you from nothing to your first Amadeus session. It should take a
+few minutes.
 
-## 1. Install Tau
+## 1. Install Amadeus
 
-Tau is a Python tool requiring Python 3.12 or newer. Its installer uses
-[`uv`](https://docs.astral.sh/uv/) to create an isolated environment and installs
-`uv` first when it is not already available.
-
-On macOS or Linux, run:
+Amadeus is a fork of Tau and is **not published to PyPI**. Install it from a
+checkout using [`uv`](https://docs.astral.sh/uv/); it requires Python 3.12 or
+newer. The distribution is named `amadeus` and the CLI command remains `tau`.
 
 ```bash
-curl -LsSf https://twotimespi.dev/install.sh | sh
+git clone https://github.com/Meteorite258/Amadeus.git
+cd Amadeus
+uv sync --dev
 ```
 
-On Windows, run in PowerShell:
+Make the command available globally as an editable tool:
 
-```powershell
-irm https://twotimespi.dev/install.ps1 | iex
+```bash
+uv tool install --editable --force .
 ```
-
-The installer announces before installing `uv`, never uses `sudo`, verifies the
-installed `tau` command, and tells you if you need to restart your shell for a
-`PATH` update. To review code before executing it, download and inspect
-[`install.sh`](/install.sh) or [`install.ps1`](/install.ps1) first.
 
 Check it worked:
 
 ```bash
 tau --version
 ```
-
-{{% tip title="Already have a package manager?" %}}
-Install Tau directly with `uv tool install tau-ai`, `pipx install tau-ai`, or
-`python -m pip install tau-ai`.
-{{% /tip %}}
 
 ### Upgrade Tau
 

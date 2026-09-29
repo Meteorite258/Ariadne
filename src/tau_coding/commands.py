@@ -107,6 +107,7 @@ class CommandResult:
     """Result of handling a coding-session slash command."""
 
     handled: bool
+    incident_action: str | None = None
     exit_requested: bool = False
     clear_requested: bool = False
     reload_requested: bool = False
@@ -225,6 +226,14 @@ class CommandRegistry:
 def create_default_command_registry() -> CommandRegistry:
     """Create Tau's built-in slash command registry."""
     registry = CommandRegistry()
+    registry.register(
+        SlashCommand(
+            name="incident",
+            usage="/incident <action>",
+            description="Open or control an incident case workspace.",
+            handler=lambda context: CommandResult(handled=True, incident_action=context.args),
+        )
+    )
     registry.register(
         SlashCommand(
             name="quit",

@@ -6,6 +6,7 @@ import re
 from dataclasses import dataclass, field
 from hashlib import sha256
 from os import environ
+from os.path import normcase
 from pathlib import Path
 
 
@@ -142,6 +143,14 @@ class TauPaths:
         digest = sha256(str(resolved).encode("utf-8")).hexdigest()[:6]
         slug = _slugify_path(resolved)
         return self.sessions_dir / f"{slug or 'project'}-{digest}"
+
+    def project_incident_dir(self, cwd: Path) -> Path:
+        """Keep cases separate from sessions, keyed by the canonical project location."""
+        resolved = cwd.resolve()
+        canonical = Path(normcase(str(resolved)))
+        digest = sha256(str(canonical).encode("utf-8")).hexdigest()[:16]
+        slug = _slugify_path(canonical)
+        return self.home / "incidents" / f"{slug or 'project'}-{digest}"
 
     def default_session_path(self, cwd: Path) -> Path:
         """Return the default JSONL session path for a project cwd."""

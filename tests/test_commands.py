@@ -128,6 +128,7 @@ def test_registered_commands_are_pi_aligned(tmp_path: Path) -> None:
         "compact",
         "export",
         "hotkeys",
+        "incident",
         "local",
         "login",
         "logout",
@@ -148,6 +149,14 @@ def test_registered_commands_are_pi_aligned(tmp_path: Path) -> None:
         "tools",
         "tree",
     ]
+
+
+def test_incident_command_forwards_action_without_running_it(tmp_path: Path) -> None:
+    registry = create_default_command_registry()
+    session = FakeSession(tmp_path)
+    result = registry.execute(session, "/incident show")
+    assert result.handled is True
+    assert result.incident_action == "show"
 
 
 def test_local_command_requests_host_action(tmp_path: Path) -> None:

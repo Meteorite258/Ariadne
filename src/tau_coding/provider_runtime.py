@@ -217,8 +217,11 @@ def create_model_provider(
     thinking_level: ThinkingLevel | None = None,
     inference_provider: str | None = None,
     response_headers_observer: Callable[[Mapping[str, str]], None] | None = None,
+    max_output_tokens: int | None = None,
 ) -> ClosableModelProvider:
     """Create a runtime model provider from durable provider settings."""
+    if max_output_tokens is not None and max_output_tokens < 1:
+        raise ProviderConfigError("max_output_tokens must be positive")
     if model is not None:
         validate_provider_model(provider, model)
     if inference_provider is not None:
@@ -236,6 +239,8 @@ def create_model_provider(
             model=model,
             thinking_level=thinking_level,
         )
+        if max_output_tokens is not None:
+            config = replace(config, max_tokens=max_output_tokens)
         if credential is not None:
             runtime_auth = _required_oauth_provider(provider.name).runtime_auth(credential)
             oauth_retention, _ = anthropic_cache_settings(provider, model, oauth=True)
@@ -284,6 +289,8 @@ def create_model_provider(
             model=model,
             thinking_level=thinking_level,
         )
+        if max_output_tokens is not None:
+            compatible_config = replace(compatible_config, max_tokens=max_output_tokens)
         if inference_provider is not None and model is not None:
             compatible_config = replace(
                 compatible_config,
@@ -326,7 +333,7 @@ def create_model_provider(
                 provider_name=compatible_config.provider_name,
                 max_retries=compatible_config.max_retries,
                 max_retry_delay_seconds=compatible_config.max_retry_delay_seconds,
-                max_tokens=provider_model_max_tokens(provider, model),
+                max_tokens=max_output_tokens or provider_model_max_tokens(provider, model),
                 bearer_auth=True,
                 credential_resolver=compatible_config.credential_resolver,
                 supports_images=compatible_config.supports_images,

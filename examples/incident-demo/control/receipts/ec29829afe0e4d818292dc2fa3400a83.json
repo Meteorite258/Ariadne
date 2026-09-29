@@ -1,0 +1,17 @@
+{
+  "operation": "ec29829afe0e4d818292dc2fa3400a83",
+  "before": {
+    "container_id": "900b57e865c3046dda86fc45494d5fbe2876b3912bd68cf7467f674300554b40",
+    "image": "sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+    "PAYMENT_ADDR": "payment:50051",
+    "running": true
+  },
+  "after": {
+    "container_id": "f0890acf39f60168305dc09079e72cdb0bb7c3f424d77fb0ef9265615dcb9afc",
+    "image": "sha256:5ab0d7b9003206a32c72ef48b42a535c3f70565251d7d832f86fe9f249f16635",
+    "PAYMENT_ADDR": "payment-old:50051",
+    "running": true
+  },
+  "at": "2026-09-27T08:32:19.598199+00:00",
+  "status": "applied"
+}
